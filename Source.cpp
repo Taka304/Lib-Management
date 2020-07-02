@@ -54,7 +54,7 @@ void Login()
 		cin >> a.passWord;
 	}
 	cout << "Chao mung ban." << endl;
-	return; //Them menu có quyen su dung sau
+	return; //Them menu co quyen su dung sau
 }
 int main()
 {
