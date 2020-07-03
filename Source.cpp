@@ -15,7 +15,7 @@ bool checkUser(userInfo a)
 	{
 		return false;
 	}
-	userInfo* b=new userInfo;
+	userInfo* b = new userInfo;
 	int dem;
 	do
 	{
@@ -26,7 +26,7 @@ bool checkUser(userInfo a)
 		cout << ss1 << endl;
 		int ss2= strcmp(b->passWord, a.passWord);
 		cout << ss2 << endl;*/
-		if (strcmp(b->userName,a.userName)==0 && strcmp(b->passWord, a.passWord)==0)
+		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
 		{
 			delete[]b;
 			fclose(fp);
@@ -34,9 +34,10 @@ bool checkUser(userInfo a)
 		}
 	} while (dem == 1);
 	delete[]b;
+	fclose(fp);
 	return false;
 }
-void Login()
+userInfo Login()
 {
 	userInfo a;
 	cout << "Nhap ten tai khoan va mat khau:" << endl;
@@ -54,9 +55,54 @@ void Login()
 		cin >> a.passWord;
 	}
 	cout << "Chao mung ban." << endl;
-	return; //Them menu co quyen su dung sau
+	return a; //Them menu có quyen su dung sau
+}
+void ChangePassword(userInfo a, char* np)
+{
+	FILE* f = fopen("account.txt", "rb+");
+	if (!f)
+	{
+		return;
+	}
+	userInfo* b = new userInfo;
+	int dem;
+	do
+	{
+		dem = fread(b, sizeof(userInfo), 1, f);
+		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
+		{
+			int len = sizeof(userInfo);
+			fseek(f, -len, SEEK_CUR);
+			strcpy(b->passWord, np);
+			fwrite(b, sizeof(userInfo), 1, f);
+			delete[]b;
+			fclose(f);
+			return;
+		}
+	} while (dem == 1);
+}
+void DangKy(userInfo a)
+{
+	FILE* f = fopen("account.txt", "ab");
+	if (!f)
+	{
+		return;
+	}
+	userInfo* b = &a;
+	fwrite(b, sizeof(userInfo), 1, f);
+	fclose(f);
 }
 int main()
 {
-	Login();
+	userInfo a;
+	cout << "Nhap ten: ";
+	cin >> a.userName;
+	cout << "Nhap mat khau:";
+	cin >> a.passWord;
+	DangKy(a);
+	a=Login();
+	char np[MAX_PASSWORD];
+	cout << "Nhap mat khau moi: ";
+	cin >> np;
+	ChangePassword(a, np);
 }
