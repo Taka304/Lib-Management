@@ -1,13 +1,18 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <conio.h> 
+#include <ctype.h> 
 using namespace std;
+
 #define MAX_USERNAME 50
 #define MAX_PASSWORD 25
+
 struct userInfo
 {
 	char userName[MAX_USERNAME + 1];
 	char passWord[MAX_PASSWORD + 1];
 };
+
 bool checkUser(userInfo a)
 {
 	FILE* fp = fopen("account.txt", "rb");
@@ -37,26 +42,51 @@ bool checkUser(userInfo a)
 	fclose(fp);
 	return false;
 }
+
+void insertPassword(userInfo& a) //Nhap mat khau duoi dang '*'
+{
+	int ch;
+	int i = 0;
+	cout << "Mat khau: ";
+	fflush(stdout);
+	while ((ch = _getch()) != EOF && ch != '\n'&& ch!='\r')
+	{
+		if (ch == '\b' && i > 0)
+		{
+			printf("\b \b");
+			fflush(stdout);
+			i--;
+			a.passWord[i] = '\0';
+		}
+		else if (isalnum(ch))
+		{
+			putchar('*');
+			a.passWord[i++] = (char)ch;
+		}
+	}
+	a.passWord[i++] = '\0';
+	cout << endl;
+}
+
 userInfo Login()
 {
 	userInfo a;
 	cout << "Nhap ten tai khoan va mat khau:" << endl;
 	cout << "Tai khoan: ";
 	cin >> a.userName;
-	cout << "Mat khau: ";
-	cin >> a.passWord;
+	insertPassword(a);
 	while (!checkUser(a))
 	{
 		cout << "Sai tai khoan hoac mat khau, moi nhap lai:" << endl;
 		cout << "Nhap ten tai khoan va mat khau:" << endl;
 		cout << "Tai khoan: ";
 		cin >> a.userName;
-		cout << "Mat khau: ";
-		cin >> a.passWord;
+		insertPassword(a);
 	}
 	cout << "Chao mung ban." << endl;
 	return a; //Them menu có quyen su dung sau
 }
+
 void ChangePassword(userInfo a, char* np)
 {
 	FILE* f = fopen("account.txt", "rb+");
@@ -81,6 +111,7 @@ void ChangePassword(userInfo a, char* np)
 		}
 	} while (dem == 1);
 }
+
 void DangKy(userInfo a)
 {
 	FILE* f = fopen("account.txt", "ab");
@@ -92,15 +123,15 @@ void DangKy(userInfo a)
 	fwrite(b, sizeof(userInfo), 1, f);
 	fclose(f);
 }
+
 int main()
 {
 	userInfo a;
 	cout << "Nhap ten: ";
 	cin >> a.userName;
-	cout << "Nhap mat khau:";
-	cin >> a.passWord;
+	insertPassword(a);
 	DangKy(a);
-	a=Login();
+	a = Login();
 	char np[MAX_PASSWORD];
 	cout << "Nhap mat khau moi: ";
 	cin >> np;
