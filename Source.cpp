@@ -33,12 +33,12 @@ bool checkUser(userInfo a)
 		cout << ss2 << endl;*/
 		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
 		{
-			delete[]b;
+			delete b;
 			fclose(fp);
 			return true;
 		}
 	} while (dem == 1);
-	delete[]b;
+	delete b;
 	fclose(fp);
 	return false;
 }
@@ -101,11 +101,12 @@ void ChangePassword(userInfo a, char* np)
 		dem = fread(b, sizeof(userInfo), 1, f);
 		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
 		{
-			int len = sizeof(userInfo);
+			char* name = b->userName;
+			int len = sizeof(userInfoToLogin);
 			fseek(f, -len, SEEK_CUR);
-			strcpy(b->passWord, np);
-			fwrite(b, sizeof(userInfo), 1, f);
-			delete[]b;
+			fwrite(name, sizeof(b->userName), 1, f);
+			fwrite(np, sizeof(b->passWord), 1, f);
+			delete b;
 			fclose(f);
 			return;
 		}
