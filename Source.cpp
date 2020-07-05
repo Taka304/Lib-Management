@@ -104,7 +104,7 @@ void ChangePassword(userInfo a, char* np)
 	{
 		return;
 	}
-	userInfo *b=new userInfo;
+	userInfo* b = new userInfo;
 	int dem;
 	do
 	{
@@ -112,9 +112,8 @@ void ChangePassword(userInfo a, char* np)
 		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
 		{
 			char* name = b->userName;
-			int len = sizeof(userInfo);
+			int len = sizeof(userInfo) - (MAX_USERNAME + 1);
 			fseek(f, -len, SEEK_CUR);
-			fwrite(name, sizeof(b->userName), 1, f);
 			fwrite(np, sizeof(b->passWord), 1, f);
 			delete b;
 			fclose(f);
@@ -180,9 +179,129 @@ void addUserToFile(userInfo a)
 }
 bool checkPassWord(userInfo a, char* p)
 {
-	if (strcmp(a.passWord,p))
+	if (strcmp(a.passWord, p))
 		return true;
 	return false;
+}
+void changeFullName(userInfo a, char* nName)
+{
+	FILE* f = fopen("account.txt", "rb+");
+	if (!f)
+	{
+		return;
+	}
+	userInfo* b = new userInfo;
+	int dem;
+	do
+	{
+		dem = fread(b, sizeof(userInfo), 1, f);
+		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
+		{
+			char* name = b->userName;
+			int len = sizeof(userInfo) - (MAX_USERNAME + MAX_PASSWORD + 2);
+			fseek(f, -len, SEEK_CUR);
+			fwrite(nName, sizeof(b->fullName), 1, f);
+			delete b;
+			fclose(f);
+			return;
+		}
+	} while (dem == 1);
+}
+void changeBirthday(userInfo a, char* nDay)
+{
+	FILE* f = fopen("account.txt", "rb+");
+	if (!f)
+	{
+		return;
+	}
+	userInfo* b = new userInfo;
+	int dem;
+	do
+	{
+		dem = fread(b, sizeof(userInfo), 1, f);
+		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
+		{
+			char* name = b->userName;
+			int len = sizeof(userInfo) - (MAX_USERNAME + MAX_PASSWORD + MAX_NAME + 3);
+			fseek(f, -len, SEEK_CUR);
+			fwrite(nDay, sizeof(b->passWord), 1, f);
+			delete b;
+			fclose(f);
+			return;
+		}
+	} while (dem == 1);
+}
+void changeIdentityID(userInfo a, char* nID)
+{
+	FILE* f = fopen("account.txt", "rb+");
+	if (!f)
+	{
+		return;
+	}
+	userInfo* b = new userInfo;
+	int dem;
+	do
+	{
+		dem = fread(b, sizeof(userInfo), 1, f);
+		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
+		{
+			char* name = b->userName;
+			int len = sizeof(userInfo) - (MAX_USERNAME + MAX_PASSWORD + MAX_NAME + MAX_BIRTHDAY + 4);
+			fseek(f, -len, SEEK_CUR);
+			fwrite(nID, sizeof(b->passWord), 1, f);
+			delete b;
+			fclose(f);
+			return;
+		}
+	} while (dem == 1);
+}
+void changeAddress(userInfo a, char* nAdd)
+{
+	FILE* f = fopen("account.txt", "rb+");
+	if (!f)
+	{
+		return;
+	}
+	userInfo* b = new userInfo;
+	int dem;
+	do
+	{
+		dem = fread(b, sizeof(userInfo), 1, f);
+		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
+		{
+			char* name = b->userName;
+			int len = sizeof(userInfo) - (MAX_USERNAME + MAX_PASSWORD + MAX_NAME + MAX_BIRTHDAY + MAX_CMND + 5);
+			fseek(f, -len, SEEK_CUR);
+			fwrite(nAdd, sizeof(b->passWord), 1, f);
+			delete b;
+			fclose(f);
+			return;
+		}
+	} while (dem == 1);
+}
+void changeSex(userInfo a, char* nSex)
+{
+	FILE* f = fopen("account.txt", "rb+");
+	if (!f)
+	{
+		return;
+	}
+	userInfo* b = new userInfo;
+	int dem;
+	do
+	{
+		dem = fread(b, sizeof(userInfo), 1, f);
+		if (strcmp(b->userName, a.userName) == 0 && strcmp(b->passWord, a.passWord) == 0)
+		{
+			char* name = b->userName;
+			int len = sizeof(userInfo) - (MAX_USERNAME + MAX_PASSWORD + MAX_NAME + MAX_BIRTHDAY + MAX_CMND + MAX_SEX + 6);
+			fseek(f, -len, SEEK_CUR);
+			fwrite(nSex, sizeof(b->passWord), 1, f);
+			delete b;
+			fclose(f);
+			return;
+		}
+	} while (dem == 1);
 }
 void changeInfo(userInfo a)
 {
@@ -218,14 +337,52 @@ void changeInfo(userInfo a)
 					cout << "Mat khau sai, moi nhap lai." << endl;
 					cin >> op;
 				}
-				cout << "Nhap mat khau moi: " << endl;
+				cout << "Nhap mat khau moi: ";
 				cin >> np;
 				ChangePassword(a, np);
+				break;
 			}
 			case 2:
 			{
-
+				char nName[MAX_NAME + 1];
+				cout << "Nhap ho va ten moi: ";
+				cin >> nName;
+				changeFullName(a, nName);
+				break;
 			}
+			case 3:
+			{
+				char nDay[MAX_BIRTHDAY + 1];
+				cout << "Nhap ngay sinh moi: ";
+				cin >> nDay;
+				changeBirthday(a, nDay);
+				break;
+			}
+			case 4:
+			{
+				char nID[MAX_CMND + 1];
+				cout << "Nhap CMND moi: ";
+				cin >> nID;
+				changeIdentityID(a, nID);
+				break;
+			}
+			case 5:
+			{
+				char nAdd[MAX_ADDRESS + 1];
+				cout << "Nhap dia chi moi: ";
+				cin >> nAdd;
+				changeAddress(a, nAdd);
+				break;
+			}
+			case 6:
+			{
+				char nSex[MAX_SEX + 1];
+				cout << "Nhap gioi tinh moi: ";
+				cin >> nSex;
+				changeSex(a, nSex);
+				break;
+			}
+			case 0: return;
 		}
 	}
 }
@@ -244,10 +401,10 @@ void menuExpert()
 int main()
 {
 	userInfo a;
-	a= createUser();
+	a = createUser();
 	addUserToFile(a);
 	userInfo b = Login();
-	char np[MAX_PASSWORD+1];
+	char np[MAX_PASSWORD + 1];
 	cout << "Nhap mat khau moi: ";
 	cin >> np;
 	//ChangePassword(b, np);
