@@ -9,6 +9,7 @@ using namespace std;
 #define MAX_REMAIL 50
 #define MAX_RCMND 13
 #define MAX_RADDRESS 250
+#define MAX_RSEX 4
 
 struct date
 {
@@ -23,7 +24,7 @@ struct readersInfo
 	char fullname[MAX_RNAME];
 	char cmnd[MAX_RCMND];
 	date bDay;
-	char sex[4];
+	char sex[MAX_RSEX];
 	char email[MAX_REMAIL];
 	char address[MAX_RADDRESS];
 	date createdDay;
@@ -47,7 +48,7 @@ void init_rList(rList& l)
 	l.head = NULL;
 }
 
-//Tao doc gia
+//Tao node doc gia
 rNode *createReader(readersInfo a)
 {
 	rNode* p = new rNode[sizeof(rNode)];
@@ -56,6 +57,7 @@ rNode *createReader(readersInfo a)
 	return p;
 }
 
+//Tim node doc gia dua tren thong tin
 int FindX(char i[], rList l)
 {
 	rNode* p;
@@ -83,6 +85,7 @@ int Len(rList L) // Do dai danh sach
 	return i;
 }
 
+//xoa dau ds
 void deleteHead(rList& d)
 {
 	if (d.head == NULL)
@@ -92,6 +95,7 @@ void deleteHead(rList& d)
 	d.head = d.head->next;
 }
 
+//xoa cuoi ds
 void deleteTail(rList& d)
 {
 	if (d.head == NULL)
@@ -106,6 +110,7 @@ void deleteTail(rList& d)
 	p->next = NULL;
 }
 
+//xoa ds tai vi tri co thong tin da tim
 void deleteAt(rList& L, int k)
 {
 	rNode* PH = L.head, * PT;
@@ -129,6 +134,7 @@ void deleteAt(rList& L, int k)
 	}
 }
 
+//tao ngay lap the
 date today()
 {
 	time_t now= time(0);
@@ -140,6 +146,7 @@ date today()
 	return today;
 }
 
+//tao ngay het han
 date expDay()
 {
 	time_t now = time(0);
@@ -160,14 +167,15 @@ void insertTail(rList& l, readersInfo a)
 		l.head = newReader;
 		return;
 	}
-	else
-	{
-		newReader->next = l.head;
-		l.head = newReader;
-		return;
+	rNode* p = l.head;
+	while (p->next != NULL) {
+		p = p->next;
 	}
+		p->next = newReader;
+		return;
 }
 
+//doc ngay
 void readDate(FILE* filename, date &a)
 {
 	
@@ -178,6 +186,7 @@ void readDate(FILE* filename, date &a)
 	fscanf(filename, "%d", &a.year);
 }
 
+//doc thong tin 1 doc gia tu file
 void read1Reader(FILE* f,readersInfo& r)
 {
 	fscanf(f, "%[^,]", r.ID);
@@ -200,18 +209,7 @@ void read1Reader(FILE* f,readersInfo& r)
 	fgetc(f);
 }
 
-void infoOut(readersInfo r)
-{
-	cout << "ID: " << r.ID << endl;
-	cout << "Ho ten: " << r.fullname << endl;
-	cout << "CMND: " << r.cmnd << endl;
-	cout << "Ngay thang nam sinh: " << r.bDay.day << "/" << r.bDay.month << "/" << r.bDay.year << endl;
-	cout << "Gioi tinh: " << r.sex << endl;
-	cout << "Dia chi: " << r.address << endl;
-	cout << "Ngay lap the: " << r.createdDay.day << "/" << r.createdDay.month << "/" << r.createdDay.year << endl;
-	cout << "Ngay het han: " << r.exDay.day << "/" << r.exDay.month << "/" << r.exDay.year << endl;
-}
-
+//doc ds doc gia tu file
 void readRList(rList& l)
 {
 	FILE* f = fopen("reader.txt", "r+");
@@ -230,6 +228,20 @@ void readRList(rList& l)
 	fclose(f);
 }
 
+//xuat thong tin 1 doc gia ra man hinh
+void infoOut(readersInfo r)
+{
+	cout << "ID: " << r.ID << endl;
+	cout << "Ho ten: " << r.fullname << endl;
+	cout << "CMND: " << r.cmnd << endl;
+	cout << "Ngay thang nam sinh: " << r.bDay.day << "/" << r.bDay.month << "/" << r.bDay.year << endl;
+	cout << "Gioi tinh: " << r.sex << endl;
+	cout << "Dia chi: " << r.address << endl;
+	cout << "Ngay lap the: " << r.createdDay.day << "/" << r.createdDay.month << "/" << r.createdDay.year << endl;
+	cout << "Ngay het han: " << r.exDay.day << "/" << r.exDay.month << "/" << r.exDay.year << endl;
+}
+
+//xuat ds thong tin doc gia tu file
 void readerListout(rList l)
 {
 	int dem = 1;
@@ -240,6 +252,7 @@ void readerListout(rList l)
 	}
 }
 
+//nhap thong tin doc gia
 void infoIn(readersInfo &r)
 {
 	cout << "ID: ";
@@ -261,21 +274,23 @@ void infoIn(readersInfo &r)
 	r.exDay = expDay();
 }
 
+//ghi ngay tu file
 void writeDate(FILE* f, date a)
 {
 	fprintf(f, "%d/%d/%d,", a.day, a.month, a.year);
 }
 
+//ghi thong tin 1 doc gia vao file
 void write1Reader(FILE *f,readersInfo& r)
 {
-	fprintf(f, "%s,%s,%s,", r.ID, r.fullname, r.cmnd);
+	fprintf(f, "\n%s,%s,%s,", r.ID, r.fullname, r.cmnd);
 	writeDate(f, r.bDay);
 	fprintf(f, "%s,%s,%s,", r.sex,r.email, r.address);
 	writeDate(f, r.createdDay);
 	writeDate(f, r.exDay);
-	fprintf(f, "\n");
 }
 
+//Nhap thong tin 1 doc gia vao cuoi file
 void insertReader(readersInfo& r)
 {
 
@@ -290,6 +305,7 @@ void insertReader(readersInfo& r)
 	fclose(f);
 }
 
+//xoa thong tin 1 doc gia
 void deleteReader(rList& l)
 {
 	
@@ -320,21 +336,119 @@ void deleteReader(rList& l)
 
 }
 
-rNode* FindCMND(char i[], rList l)
+//tim doc gia theo cmnd
+void FindCMND(rList& l)
 {
 	rNode* p;
+	char i[MAX_RCMND];
 	cout << "Nhap cmnd: ";
+	cin >> i;
+	readRList(l);
 	for (p = l.head; p != NULL; p = p->next)
 	{
-		if (p->info.cmnd == i)
-			return p;
+		if (strcmp(p->info.cmnd, i) == 0)
+		{
+			infoOut(p->info);
+			return;
+		}
+			
 	}
-	return NULL;
+	cout << "Khong tim duoc cmnd tren!";
 }
 
-int main()
+//menu doi thong tin
+void changeInfodisplay()
 {
-	rList l;
+	cout << "Nhan 1 de thay doi ho ten" << endl;
+	cout << "Nhan 2 de thay ngay sinh" << endl;
+	cout << "Nhan 3 de thay doi CMND" << endl;
+	cout << "Nhan 4 de thay doi gioi tinh" << endl;
+	cout << "Nhan 5 de thay doi email" << endl;
+	cout << "Nhan 6 de thay doi dia chi" << endl;
+	cout << "Nhan bat ky de tro lai menu" << endl;
+	cout << "Lua chon cua ban: ";
+}
+
+//lua chon doi thong tin
+void changeInfo(readersInfo& r)
+{
+	int option;
+	do
+	{
+		system("cls");
+		changeInfodisplay();
+		cin >> option;
+		switch (option)
+		{
+		case 1:
+		{
+			char i[MAX_RNAME];
+			cout << "Nhap ho ten moi: ";
+			cin >> i;
+			strcpy(r.fullname, i);
+			break;
+		}
+		case 2:
+		{
+			date i;
+			cout << "Nhap ngay thang nam sinh moi: ";
+			cin >> i.day >> i.month >> i.year;
+			r.bDay.day = i.day;
+			r.bDay.month = i.month;
+			r.bDay.year = i.year;
+			break;
+		}
+		case 3:
+		{
+			char i[MAX_RCMND];
+			cout << "Nhap CMND moi: ";
+			cin >> i;
+			strcpy(r.cmnd, i);
+			break;
+		}
+		case 4:
+		{
+			char i[MAX_RSEX];
+			cout << "Nhap gioi tinh moi: ";
+			cin >> i;
+			strcpy(r.sex, i);
+			break;
+		}
+		case 5:
+		{
+			char i[MAX_REMAIL];
+			cout << "Nhap email moi: ";
+			cin >> i;
+			strcpy(r.email, i);
+			break;
+		}
+		case 6:
+		{
+			char i[MAX_RADDRESS];
+			cout << "Nhap dia chi moi: ";
+			cin >> i;
+			strcpy(r.address, i);
+			break;
+		}
+		}
+	} while (option > 0 && option <= 6);
+}
+
+//doi thong tin dua vao ID
+void changeInfobyID(rList& l)
+{
+	rNode* p;
+	char i[MAX_RID];
+	cout << "Nhap ID: ";
+	cin >> i;
 	readRList(l);
-	readerListout(l);
+	for (p = l.head; p != NULL; p = p->next)
+	{
+		if (strcmp(p->info.ID, i) == 0)
+		{
+			changeInfo(p->info);
+			return;
+		}
+	}
+	cout << "Khong tim duoc ID tren!";
 }
