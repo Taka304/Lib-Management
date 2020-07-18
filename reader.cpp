@@ -7,7 +7,7 @@ using namespace std;
 #define MAX_RID 9
 #define MAX_RNAME 50
 #define MAX_REMAIL 50
-#define MAX_RCMND 10
+#define MAX_RCMND 13
 #define MAX_RADDRESS 250
 
 struct date
@@ -34,20 +34,17 @@ struct rNode
 {
 	readersInfo info;
 	rNode* next;
-	rNode* prev;
 };
 
 struct rList
 {
 	rNode* head;
-	rNode* tail;
 };
 
 //Tao ds doc gia
 void init_rList(rList& l) 
 {
 	l.head = NULL;
-	l.tail = NULL;
 }
 
 //Tao doc gia
@@ -56,8 +53,80 @@ rNode *createReader(readersInfo a)
 	rNode* p = new rNode[sizeof(rNode)];
 	p->info = a;
 	p->next = NULL;
-	p->prev = NULL;
 	return p;
+}
+
+int FindX(char i[], rList l)
+{
+	rNode* p;
+	int dem = 0;
+	for (p = l.head; p != NULL; p = p->next)
+	{
+		dem++;
+		if (strcmp(p->info.ID, i)==0)
+			return dem;
+	}
+	return NULL;
+}
+
+int Len(rList L) // Do dai danh sach
+{
+	rNode* PH = L.head;
+	int i = 0;
+	if (PH != NULL) i = 1;
+	while (PH != NULL)
+	{
+		if (PH == NULL) break;
+		PH = PH->next;
+		i++;
+	}
+	return i;
+}
+
+void deleteHead(rList& d)
+{
+	if (d.head == NULL)
+	{
+		return;
+	}
+	d.head = d.head->next;
+}
+
+void deleteTail(rList& d)
+{
+	if (d.head == NULL)
+	{
+		return;
+	}
+	rNode* p = d.head;
+	while (p->next != NULL)
+	{
+		p = p->next;
+	}
+	p->next = NULL;
+}
+
+void deleteAt(rList& L, int k)
+{
+	rNode* PH = L.head, * PT;
+	int i = 1, l = Len(L);
+	if (k<1 || k> l + 1) printf("Vi tri xoa khong hop le !");
+	else
+	{
+		if (k == 1) deleteHead(L);
+		else
+			if (k == l + 1) deleteTail(L);
+			else
+			{
+				while (PH != NULL && i != k - 1)
+				{
+					i++;
+					PH = PH->next;
+				}
+				PT = PH->next->next;
+				PH->next = PT;
+			}
+	}
 }
 
 date today()
@@ -89,85 +158,46 @@ void insertTail(rList& l, readersInfo a)
 	if (l.head == NULL)
 	{
 		l.head = newReader;
-		l.tail = newReader;
 		return;
 	}
 	else
 	{
-		l.tail->next = newReader;
-		newReader->prev = l.tail;
-		l.tail = newReader;
+		newReader->next = l.head;
+		l.head = newReader;
+		return;
 	}
 }
 
 void readDate(FILE* filename, date &a)
 {
-	fread(&a.day, sizeof(a.day), 1, filename);
-	fseek(filename, 1, SEEK_CUR);
-	fread(&a.month, sizeof(a.month), 1, filename);
-	fseek(filename, 1, SEEK_CUR);
-	fread(&a.year, sizeof(a.year), 1, filename);
-}
-
-void writeDate(FILE* filename, date& a)
-{
-	fwrite(&a.day, sizeof(a.day), 1, filename);
-	fwrite("/", sizeof(char), 1, filename);
-	fwrite(&a.month, sizeof(a.month), 1, filename);
-	fwrite("/", sizeof(char), 1, filename);
-	fwrite(&a.year, sizeof(a.year), 1, filename);
+	
+	fscanf(filename, "%d", &a.day);
+	fgetc(filename);
+	fscanf(filename, "%d", &a.month);
+	fgetc(filename);
+	fscanf(filename, "%d", &a.year);
 }
 
 void read1Reader(FILE* f,readersInfo& r)
 {
-	fread(&r.ID, sizeof(r.ID), 1, f);
-	fseek(f, 1, SEEK_CUR);
-	fread(&r.fullname, sizeof(r.fullname), 1, f);
-	fseek(f, 1, SEEK_CUR);
-	fread(&r.cmnd, sizeof(r.cmnd), 1, f);
-	fseek(f, 1, SEEK_CUR);
+	fscanf(f, "%[^,]", r.ID);
+	fgetc(f);
+	fscanf(f, "%[^,]", r.fullname);
+	fgetc(f);
+	fscanf(f, "%[^,]", r.cmnd);
+	fgetc(f);
 	readDate(f, r.bDay);
-	fseek(f, 1, SEEK_CUR);
-	fread(&r.sex, sizeof(r.sex), 1, f);
-	fseek(f, 1, SEEK_CUR);
-	fread(&r.email, sizeof(r.email), 1, f);
-	fseek(f, 1, SEEK_CUR);
-	fread(&r.address, sizeof(r.address), 1, f);
-	fseek(f, 1, SEEK_CUR);
+	fgetc(f);
+	fscanf(f, "%[^,]", r.sex);
+	fgetc(f);
+	fscanf(f, "%[^,]", r.email);
+	fgetc(f);
+	fscanf(f, "%[^,]", r.address);
+	fgetc(f);
 	readDate(f, r.createdDay);
-	fseek(f, 1, SEEK_CUR);
+	fgetc(f);
 	readDate(f, r.exDay);
-	fseek(f, 1, SEEK_CUR);
-}
-
-void input1Reader(readersInfo& r)
-{
-	FILE* f = fopen("reader1.txt", "wb+");
-	if (!f)
-	{
-		cout << "Khong mo duoc";
-		return;
-	}
-	fwrite(r.ID, sizeof(r.ID), 1, f);
-	fwrite(",", sizeof(char), 1, f);
-	fwrite(r.fullname, sizeof(r.fullname), 1, f);
-	fwrite(",", sizeof(char), 1, f);
-	fwrite(r.cmnd, sizeof(r.cmnd), 1, f);
-	fwrite(",", sizeof(char), 1, f);
-	writeDate(f, r.bDay);
-	fwrite(",", sizeof(char), 1, f);
-	fwrite(r.sex, sizeof(r.sex), 1, f);
-	fwrite(",", sizeof(char), 1, f);
-	fwrite(r.email, sizeof(r.email), 1, f);
-	fwrite(",", sizeof(char), 1, f);
-	fwrite(r.address, sizeof(r.address), 1, f);
-	fwrite(",", sizeof(char), 1, f);
-	r.createdDay = today();
-	writeDate(f, r.createdDay);
-	fwrite(",", sizeof(char), 1, f);
-	r.exDay = expDay();
-	writeDate(f, r.exDay);
-	fclose(f);
+	fgetc(f);
 }
 
 void infoOut(readersInfo r)
@@ -176,7 +206,7 @@ void infoOut(readersInfo r)
 	cout << "Ho ten: " << r.fullname << endl;
 	cout << "CMND: " << r.cmnd << endl;
 	cout << "Ngay thang nam sinh: " << r.bDay.day << "/" << r.bDay.month << "/" << r.bDay.year << endl;
-	cout << "Gioi tinh " << r.sex << endl;
+	cout << "Gioi tinh: " << r.sex << endl;
 	cout << "Dia chi: " << r.address << endl;
 	cout << "Ngay lap the: " << r.createdDay.day << "/" << r.createdDay.month << "/" << r.createdDay.year << endl;
 	cout << "Ngay het han: " << r.exDay.day << "/" << r.exDay.month << "/" << r.exDay.year << endl;
@@ -184,13 +214,14 @@ void infoOut(readersInfo r)
 
 void readRList(rList& l)
 {
-	FILE* f = fopen("reader1.txt", "rb+");
+	FILE* f = fopen("reader.txt", "r+");
 	if (!f)
 	{
 		cout << "Khong mo duoc";
 		return;
 	}
-	while (ftell(f)!= SEEK_END)
+	init_rList(l);
+	while (!feof(f))
 	{
 		readersInfo r;
 		read1Reader(f, r);
@@ -204,7 +235,7 @@ void readerListout(rList l)
 	int dem = 1;
 	for (rNode* k = l.head; k != NULL; k = k->next)
 	{
-		cout << "\n\n\t\t Nguoi doc thu " << dem++;
+		cout << "\n\n\t\t Nguoi doc thu " << dem++<<"\n";
 		infoOut(k->info);
 	}
 }
@@ -217,22 +248,93 @@ void infoIn(readersInfo &r)
 	cin.getline(r.fullname, sizeof(r.fullname));
 	cout << "CMND: ";
 	cin.getline(r.cmnd, sizeof(r.cmnd));
-	cout << "Ngay sinh: ";
+	cout << "Ngay thang nam sinh: ";
 	cin >> r.bDay.day;
-	cout << "Thang sinh: ";
 	cin >> r.bDay.month;
-	cout << "Nam sinh: ";
 	cin >> r.bDay.year;
 	cout << "Gioi tinh: ";
+	fgetc(stdin);
 	cin.getline(r.sex, sizeof(r.sex));
 	cout << "Dia chi: ";
 	cin.getline(r.address, sizeof(r.address));
+	r.createdDay = today();
+	r.exDay = expDay();
+}
+
+void writeDate(FILE* f, date a)
+{
+	fprintf(f, "%d/%d/%d,", a.day, a.month, a.year);
+}
+
+void write1Reader(FILE *f,readersInfo& r)
+{
+	fprintf(f, "%s,%s,%s,", r.ID, r.fullname, r.cmnd);
+	writeDate(f, r.bDay);
+	fprintf(f, "%s,%s,%s,", r.sex,r.email, r.address);
+	writeDate(f, r.createdDay);
+	writeDate(f, r.exDay);
+	fprintf(f, "\n");
+}
+
+void insertReader(readersInfo& r)
+{
+
+	FILE* f = fopen("reader.txt", "a");
+	if (!f)
+	{
+		cout << "Khong mo duoc";
+		return;
+	}
+	infoIn(r);
+	write1Reader(f, r);
+	fclose(f);
+}
+
+void deleteReader(rList& l)
+{
+	
+	readRList(l);
+	char newID[MAX_RID];
+	cout << "Nhap Id can xoa: ";
+	cin >> newID;
+	int flag = FindX(newID, l);
+	if (flag)
+	{
+		FILE* f = fopen("reader.txt", "w+");
+		if (!f)
+		{
+			cout << "Khong mo duoc";
+			return;
+		}
+		deleteAt(l, flag);
+		for (rNode *p = l.head; p != NULL; p = p->next)
+		{
+			write1Reader(f,p->info);
+		}
+		fclose(f);
+	}
+	else
+	{
+		cout << "Khong ton tai nguoi doc co ID tren!";
+	}
+
+}
+
+rNode* FindCMND(char i[], rList l)
+{
+	rNode* p;
+	cout << "Nhap cmnd: ";
+	for (p = l.head; p != NULL; p = p->next)
+	{
+		if (p->info.cmnd == i)
+			return p;
+	}
+	return NULL;
 }
 
 int main()
 {
 	rList l;
-	init_rList(l);
 	readRList(l);
 	readerListout(l);
 }
