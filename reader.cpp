@@ -374,6 +374,7 @@ void FindCMND(rList& l)
 	{
 		if (strcmp(p->info.cmnd, i) == 0)
 		{
+			cout << "Thong tin nguoi dung co CMND tren: " << endl;
 			infoOut(p->info);
 			return;
 		}
@@ -401,7 +402,7 @@ void changeInfo(readersInfo& r)
 	int option;
 	do
 	{
-		system("cls");
+		cout << endl;
 		changeInfodisplay();
 		cin >> option;
 		switch (option)
@@ -472,8 +473,11 @@ void changeInfobyID(rList& l)
 	{
 		if (strcmp(p->info.ID, i) == 0)
 		{
+			cout << "Thong tin nguoi dung ban muon doi\n\n";
+			infoOut(p->info);
 			changeInfo(p->info);
 			writeRList(l);
+			cout << "Doi thong tin thanh cong!";
 			return;
 		}
 	}
