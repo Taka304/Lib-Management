@@ -181,7 +181,8 @@ void insertTail(rList& l, readersInfo a)
 		return;
 	}
 	rNode* p = l.head;
-	while (p->next != NULL) {
+	while (p->next != NULL)
+	{
 		p = p->next;
 	}
 		p->next = newReader;
@@ -232,8 +233,9 @@ void readRList(rList& l)
 		return;
 	}
 	init_rList(l);
-	while (!feof(f))
+	while (fgetc(f)!=-1)
 	{
+		fseek(f, -1, SEEK_CUR);
 		readersInfo r;
 		read1Reader(f, r);
 		insertTail(l, r);
