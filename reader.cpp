@@ -68,7 +68,7 @@ int FindX(char i[], rList l)
 		if (strcmp(p->info.ID, i)==0)
 			return dem;
 	}
-	return NULL;
+	return dem;
 }
 
 int Len(rList L) // Do dai danh sach
@@ -83,6 +83,18 @@ int Len(rList L) // Do dai danh sach
 		i++;
 	}
 	return i;
+}
+
+//giai phong node
+void freeReader(rList L)
+{
+	rNode* p = L.head;
+	while (p != NULL)
+	{
+		rNode* q = p->next;
+		free(p);
+		p = q;
+	}
 }
 
 //xoa dau ds
@@ -129,6 +141,7 @@ void deleteAt(rList& L, int k)
 					PH = PH->next;
 				}
 				PT = PH->next->next;
+				delete(PH->next);
 				PH->next = PT;
 			}
 	}
@@ -212,7 +225,7 @@ void read1Reader(FILE* f,readersInfo& r)
 //doc ds doc gia tu file
 void readRList(rList& l)
 {
-	FILE* f = fopen("reader.txt", "r+");
+	FILE* f = fopen("reader.csv", "r+");
 	if (!f)
 	{
 		cout << "Khong mo duoc";
@@ -236,6 +249,7 @@ void infoOut(readersInfo r)
 	cout << "CMND: " << r.cmnd << endl;
 	cout << "Ngay thang nam sinh: " << r.bDay.day << "/" << r.bDay.month << "/" << r.bDay.year << endl;
 	cout << "Gioi tinh: " << r.sex << endl;
+	cout << "Email: " << r.email << endl;
 	cout << "Dia chi: " << r.address << endl;
 	cout << "Ngay lap the: " << r.createdDay.day << "/" << r.createdDay.month << "/" << r.createdDay.year << endl;
 	cout << "Ngay het han: " << r.exDay.day << "/" << r.exDay.month << "/" << r.exDay.year << endl;
@@ -250,6 +264,7 @@ void readerListout(rList l)
 		cout << "\n\n\t\t Nguoi doc thu " << dem++<<"\n";
 		infoOut(k->info);
 	}
+	freeReader(l);
 }
 
 //nhap thong tin doc gia
@@ -268,6 +283,8 @@ void infoIn(readersInfo &r)
 	cout << "Gioi tinh: ";
 	fgetc(stdin);
 	cin.getline(r.sex, sizeof(r.sex));
+	cout << "Email: ";
+	cin.getline(r.email, sizeof(r.email));
 	cout << "Dia chi: ";
 	cin.getline(r.address, sizeof(r.address));
 	r.createdDay = today();
@@ -277,24 +294,27 @@ void infoIn(readersInfo &r)
 //ghi ngay tu file
 void writeDate(FILE* f, date a)
 {
-	fprintf(f, "%d/%d/%d,", a.day, a.month, a.year);
+	fprintf(f, "%d/%d/%d", a.day, a.month, a.year);
 }
 
 //ghi thong tin 1 doc gia vao file
 void write1Reader(FILE *f,readersInfo& r)
 {
-	fprintf(f, "\n%s,%s,%s,", r.ID, r.fullname, r.cmnd);
+	fprintf(f, "%s,%s,%s,", r.ID, r.fullname, r.cmnd);
 	writeDate(f, r.bDay);
+	fprintf(f, ",");
 	fprintf(f, "%s,%s,%s,", r.sex,r.email, r.address);
 	writeDate(f, r.createdDay);
+	fprintf(f, ",");
 	writeDate(f, r.exDay);
+	fprintf(f, "\n");
 }
 
 //Nhap thong tin 1 doc gia vao cuoi file
 void insertReader(readersInfo& r)
 {
 
-	FILE* f = fopen("reader.txt", "a");
+	FILE* f = fopen("reader.csv", "a");
 	if (!f)
 	{
 		cout << "Khong mo duoc";
@@ -305,10 +325,25 @@ void insertReader(readersInfo& r)
 	fclose(f);
 }
 
+//ghi lai ds doc gia vao file
+void writeRList(rList& l)
+{
+	FILE* f = fopen("reader.csv", "w+");
+	if (!f)
+	{
+		cout << "Khong mo duoc";
+		return;
+	}
+	for (rNode* p = l.head; p != NULL; p = p->next)
+	{
+		write1Reader(f, p->info);
+	}
+	fclose(f);
+}
+
 //xoa thong tin 1 doc gia
 void deleteReader(rList& l)
 {
-	
 	readRList(l);
 	char newID[MAX_RID];
 	cout << "Nhap Id can xoa: ";
@@ -316,24 +351,13 @@ void deleteReader(rList& l)
 	int flag = FindX(newID, l);
 	if (flag)
 	{
-		FILE* f = fopen("reader.txt", "w+");
-		if (!f)
-		{
-			cout << "Khong mo duoc";
-			return;
-		}
 		deleteAt(l, flag);
-		for (rNode *p = l.head; p != NULL; p = p->next)
-		{
-			write1Reader(f,p->info);
-		}
-		fclose(f);
+		writeRList(l);
 	}
 	else
 	{
 		cout << "Khong ton tai nguoi doc co ID tren!";
 	}
-
 }
 
 //tim doc gia theo cmnd
@@ -447,6 +471,7 @@ void changeInfobyID(rList& l)
 		if (strcmp(p->info.ID, i) == 0)
 		{
 			changeInfo(p->info);
+			writeRList(l);
 			return;
 		}
 	}
