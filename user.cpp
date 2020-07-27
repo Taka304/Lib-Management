@@ -1,7 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <conio.h> 
-#include <ctype.h> 
+#include <ctype.h>
+#include <string.h>
 #include "user.h"
 using namespace std;
 
@@ -128,11 +129,10 @@ bool checkUser(userInfo a)
 	}
 	return false;
 }
-void insertPassword(userInfo& a) //Nhap mat khau duoi dang '*'
+void insertPassword(char *pass) //Nhap mat khau duoi dang '*'
 {
 	int ch;
 	int i = 0;
-	cout << "Mat khau: ";
 	fflush(stdout);
 	while ((ch = _getch()) != EOF && ch != '\n' && ch != '\r')
 	{
@@ -141,15 +141,15 @@ void insertPassword(userInfo& a) //Nhap mat khau duoi dang '*'
 			printf("\b \b");
 			fflush(stdout);
 			i--;
-			a.passWord[i] = '\0';
+			pass[i] = '\0';
 		}
 		else if (isalnum(ch))
 		{
 			putchar('*');
-			a.passWord[i++] = (char)ch;
+			pass[i++] = (char)ch;
 		}
 	}
-	a.passWord[i++] = '\0';
+	pass[i++] = '\0';
 	cout << endl;
 }
 userInfo Login()
@@ -158,14 +158,16 @@ userInfo Login()
 	cout << "Nhap ten tai khoan va mat khau:" << endl;
 	cout << "Tai khoan: ";
 	cin >> a.userName;
-	insertPassword(a);
+	cout << "Mat khau: ";
+	insertPassword(a.passWord);
 	while (!checkUserName_Pass(a))
 	{
 		cout << "Sai tai khoan hoac mat khau, moi nhap lai:" << endl;
 		cout << "Nhap ten tai khoan va mat khau:" << endl;
 		cout << "Tai khoan: ";
 		cin >> a.userName;
-		insertPassword(a);
+		cout << "Mat khau: ";
+		insertPassword(a.passWord);
 	}
 	cout << "Chao mung ban." << endl;
 	return a; //Them menu co quyen su dung sau
@@ -188,45 +190,57 @@ void ChangePassword(userInfo a, char* np)
 userInfo createUser()
 {
 	userInfo a;
-	cout << "Nhap ten: ";
+	cout << "Nhap ten dang nhap: ";
 	cin >> a.userName;
 	cout << "Nhap mat khau: ";
 	cin >> a.passWord;
 	cout << "Nhap ho va ten: ";
-	cin >> a.fullName;
+	cin.ignore();
+	cin.getline(a.fullName,sizeof(a.fullName));
 	cout << "Nhap ngay sinh (DD/MM/YYYY): ";
-	cin >> a.birthDay;
+	cin >> a.birthDay.day;
+	cin >> a.birthDay.month;
+	cin >> a.birthDay.year;
 	cout << "Nhap CMND: ";
 	cin >> a.identityID;
 	cout << "Nhap dia chi: ";
-	cin >> a.address;
+	cin.ignore();
+	cin.getline(a.address, sizeof(a.address));
 	cout << "Nhap gioi tinh: ";
 	cin >> a.sex;
 	cout << "Nhap phan quyen: ";
-	cin >> a.permiss;
+	cin.ignore();
+	cin.getline(a.permiss, sizeof(a.permiss));
 	cout << "Nhap tinh trang: ";
-	cin >> a.status;
+	cin.ignore();
+	cin.getline(a.status,sizeof(a.status));
 	while (checkUser(a))
 	{
-		cout << "Ten dang nhap da duoc su dung, moi nhap ten khac:" << endl;
-		cout << "Nhap ten: ";
+		userInfo a;
+		cout << "Nhap ten dang nhap: ";
 		cin >> a.userName;
 		cout << "Nhap mat khau: ";
 		cin >> a.passWord;
 		cout << "Nhap ho va ten: ";
-		cin >> a.fullName;
+		cin.ignore();
+		cin.getline(a.fullName, sizeof(a.fullName));
 		cout << "Nhap ngay sinh (DD/MM/YYYY): ";
-		cin >> a.birthDay;
+		cin >> a.birthDay.day;
+		cin >> a.birthDay.month;
+		cin >> a.birthDay.year;
 		cout << "Nhap CMND: ";
 		cin >> a.identityID;
 		cout << "Nhap dia chi: ";
-		cin >> a.address;
+		cin.ignore();
+		cin.getline(a.address, sizeof(a.address));
 		cout << "Nhap gioi tinh: ";
 		cin >> a.sex;
 		cout << "Nhap phan quyen: ";
-		cin >> a.permiss;
+		cin.ignore();
+		cin.getline(a.permiss, sizeof(a.permiss));
 		cout << "Nhap tinh trang: ";
-		cin >> a.status;
+		cin.ignore();
+		cin.getline(a.status, sizeof(a.status));
 	}
 	return a;
 }
@@ -236,6 +250,7 @@ void addUserToFile(userInfo a)
 	FILE* f = fopen("account.txt", "ab");
 	if (!f)
 	{
+		cout << "Khong mo duoc.";
 		return;
 	}
 	userInfo* b = &a;
@@ -270,20 +285,20 @@ void changeInfo(userInfo a)
 				char op[MAX_PASSWORD + 1], np[MAX_PASSWORD + 1];
 				cout << "Xac nhan mat khau cu:" << endl;
 				cout << "Nhap mat khau cu: ";
-				cin >> op;
+				insertPassword(op);
 				if (checkPassWord(a, op))
 				{
 					cout << "Nhap mat khau moi: " << endl;
-					cin >> np;
+					insertPassword(np);
 					ChangePassword(a, np);
 				}
 				while (!checkPassWord(a, op))
 				{
 					cout << "Mat khau sai, moi nhap lai." << endl;
-					cin >> op;
+					insertPassword(op);
 				}
 				cout << "Nhap mat khau moi: " << endl;
-				cin >> np;
+				insertPassword(np);
 				ChangePassword(a, np);
 			}
 			case 2:
@@ -305,7 +320,7 @@ void menuExpert()
 {
 	//
 }
-int main()
+/*int main()
 {
 	userInfo a;
 	a= createUser();
@@ -316,4 +331,4 @@ int main()
 	cin >> np;
 	//ChangePassword(b, np);
 	//Login();
-}
+}*/
