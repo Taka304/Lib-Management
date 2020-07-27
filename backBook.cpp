@@ -10,6 +10,7 @@ struct babInfo
 	date borrowDate;
 	date exBackDate;
 	date reBackDate;
+	int amount;
 	ISBNList l;
 	int lateDay;
 	//them vu mat sach nua roi cong tong tien lai
@@ -125,12 +126,10 @@ void createBaBook(babInfo& b)
 	cin >> b.reBackDate.day;
 	cin >> b.reBackDate.month;
 	cin >> b.reBackDate.year;
-	ISBNList lBook;
-	init_ISBNList(lBook);
-	int n;
+	init_ISBNList(b.l);
 	cout << "Nhap so luong sach muon: ";
-	cin >> n;
-	ISBNList_in(lBook, n);
+	cin >> b.amount;
+	ISBNList_in(b.l, b.amount);
 	int Late = TinhChenhLechNgay(b.exBackDate.day, b.exBackDate.month, b.exBackDate.year, b.reBackDate.day, b.reBackDate.month, b.reBackDate.year);
-	int money = Late * 5000 * n;
+	int money = Late * 5000 * b.amount;
 }
