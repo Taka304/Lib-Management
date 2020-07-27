@@ -87,9 +87,9 @@ void readBorrowBook(bobInfo& b, FILE* f)
 	fgetc(f);
 	readDate(f, b.exBackDate);
 	fgetc(f);
-	fscanf(f, "%[^,]", &b.amount);
+	fscanf(f, "%d", &b.amount);
 	fgetc(f);
-	cout << b.amount;
+	init_ISBNList(b.l);
 	for (int i = 0; i < b.amount; i++)
 	{
 		char id[MAX_BID];
