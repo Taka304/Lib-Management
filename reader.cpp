@@ -20,7 +20,7 @@ rNode* createReader(readersInfo a)
 }
 
 //Tim node doc gia dua tren thong tin
-int FindX(char i[], rList l)
+int FindrX(char i[], rList l)
 {
 	rNode* p;
 	int dem = 0;
@@ -33,7 +33,7 @@ int FindX(char i[], rList l)
 	return NULL;
 }
 
-int Len(rList L) // Do dai danh sach
+int rLen(rList L) // Do dai danh sach
 {
 	rNode* PH = L.head;
 	int i = 0;
@@ -48,7 +48,7 @@ int Len(rList L) // Do dai danh sach
 }
 
 //xoa dau ds
-void deleteHead(rList& d)
+void deleterHead(rList& d)
 {
 	if (d.head == NULL)
 	{
@@ -58,7 +58,7 @@ void deleteHead(rList& d)
 }
 
 //xoa cuoi ds
-void deleteTail(rList& d)
+void deleterTail(rList& d)
 {
 	if (d.head == NULL)
 	{
@@ -73,16 +73,16 @@ void deleteTail(rList& d)
 }
 
 //xoa ds tai vi tri co thong tin da tim
-void deleteAt(rList& L, int k)
+void deleterAt(rList& L, int k)
 {
 	rNode* PH = L.head, * PT;
-	int i = 1, l = Len(L);
+	int i = 1, l = rLen(L);
 	if (k<1 || k> l + 1) printf("Vi tri xoa khong hop le !");
 	else
 	{
-		if (k == 1) deleteHead(L);
+		if (k == 1) deleterHead(L);
 		else
-			if (k == l + 1) deleteTail(L);
+			if (k == l + 1) deleterTail(L);
 			else
 			{
 				while (PH != NULL && i != k - 1)
@@ -275,7 +275,7 @@ void deleteReader(rList& l)
 	char newID[MAX_RID];
 	cout << "Nhap Id can xoa: ";
 	cin >> newID;
-	int flag = FindX(newID, l);
+	int flag = FindrX(newID, l);
 	if (flag)
 	{
 		FILE* f = fopen("reader.txt", "w+");
@@ -284,7 +284,7 @@ void deleteReader(rList& l)
 			cout << "Khong mo duoc";
 			return;
 		}
-		deleteAt(l, flag);
+		deleterAt(l, flag);
 		for (rNode* p = l.head; p != NULL; p = p->next)
 		{
 			write1Reader(f, p->info);
