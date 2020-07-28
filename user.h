@@ -2,7 +2,7 @@
 #define MAX_USERNAME 51
 #define MAX_PASSWORD 26
 #define MAX_STATUS 10
-#define MAX_PERMISS 8
+#define MAX_PERMISS 12
 #define MAX_NAME 51
 #define MAX_BIRTHDAY 11
 #define MAX_CMND 13
@@ -10,15 +10,15 @@
 #define MAX_SEX 4
 struct userInfo
 {
-	char userName[MAX_USERNAME + 1];
-	char passWord[MAX_PASSWORD + 1];
-	char fullName[MAX_NAME + 1];
-	char birthDay[MAX_BIRTHDAY + 1];
-	char identityID[MAX_CMND + 1];
-	char address[MAX_ADDRESS + 1];
-	char sex[MAX_SEX + 1];
-	char permiss[MAX_PERMISS + 1]; //manager or expert or admin
-	char status[MAX_STATUS + 1]; //activated or block
+	char userName[MAX_USERNAME];
+	char passWord[MAX_PASSWORD];
+	char fullName[MAX_NAME];
+	date birthDay;
+	char identityID[MAX_CMND];
+	char address[MAX_ADDRESS];
+	char sex[MAX_SEX];
+	char permiss[MAX_PERMISS]; //quan li or chuyen vien or admin
+	char status[MAX_STATUS]; //hoat dong or block
 };
 struct uNode
 {
