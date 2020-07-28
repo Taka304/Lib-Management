@@ -39,7 +39,7 @@ void writeList(uList l);
 uNode* takeNode(uList& l);
 bool checkUserName_Pass(userInfo a);
 bool checkUser(userInfo a);
-void insertPassword(userInfo& a);
+void insertPassword(char *pass);
 userInfo Login();
 void ChangePassword(userInfo a, char* np);
 userInfo createUser();
