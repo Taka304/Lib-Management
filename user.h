@@ -1,8 +1,7 @@
 #pragma once
+#include "reader.h"
 #define MAX_USERNAME 51
 #define MAX_PASSWORD 26
-#define MAX_STATUS 10
-#define MAX_PERMISS 12
 #define MAX_NAME 51
 #define MAX_BIRTHDAY 11
 #define MAX_CMND 13
@@ -16,9 +15,9 @@ struct userInfo
 	date birthDay;
 	char identityID[MAX_CMND];
 	char address[MAX_ADDRESS];
-	char sex[MAX_SEX];
-	char permiss[MAX_PERMISS]; //quan li or chuyen vien or admin
-	char status[MAX_STATUS]; //hoat dong or block
+	int sex; //1 la nu, 2 la nam
+	int permiss; //1 la quan li, 2 la chuyen vien, 3 la admin
+	int status; //1 la hoat dong, 2 la block
 };
 struct uNode
 {
@@ -30,15 +29,15 @@ struct uList
 	uNode* head;
 };
 void init_uList(uList& l);
-uNode* findTail(uList& l);
-void addTail(uList& l, userInfo u);
+uNode* findTailuser(uList& l);
+void addTailuser(uList& l, userInfo u);
 uNode* createUserNode(userInfo x);
 void read1userInfo(FILE* f, userInfo& u, int& dem);
 void readUserFile(uList& l);
 void writeList(uList l);
 uNode* takeNode(uList& l);
 bool checkUserName_Pass(userInfo a);
-bool checkUser(userInfo a);
+bool checkUserName(userInfo a);
 void insertPassword(char *pass);
 userInfo Login();
 void ChangePassword(userInfo a, char* np);
