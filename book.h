@@ -1,21 +1,20 @@
 #pragma once
-#define MAX_BID 9
+#define MAX_ISBN 9
 #define MAX_BNAME 50
 #define MAX_BAUTHOR 50
 #define MAX_BNXB 50
 #define MAX_BYEAR 5
 #define MAX_BTYPE 20
-#define MAX_BCOST 10
 #define MAX_BNUM 10
 struct bookInfo
 {
-	char ID[MAX_BID];
+	char ISBN[MAX_ISBN];
 	char fullname[MAX_BNAME];
 	char author[MAX_BAUTHOR];
 	char nxb[MAX_BNXB];
 	char pYear[MAX_BYEAR];
 	char type[MAX_BTYPE];
-	char cost[MAX_BCOST];
+	int cost;
 	char num[MAX_BNUM];
 };
 
@@ -31,13 +30,13 @@ struct bList
 };
 void init_bList(bList& l);
 bNode* createbook(bookInfo a);
-int FindX(char i[], bList l);
-int Len(bList L);
-void freebook(bList L);
-void deleteHead(bList& d);
-void deleteTail(bList& d);
-void deleteAt(bList& L, int k);
-void insertTail(bList& l, bookInfo a);
+int FindbX(char i[], bList l);
+int bLen(bList L);
+void freebbook(bList L);
+void deletebHead(bList& d);
+void deletebTail(bList& d);
+void deletebAt(bList& L, int k);
+void insertbTail(bList& l, bookInfo a);
 void read1Book(FILE* f, bookInfo& r);
 void readBList(bList& l);
 void infoOut(bookInfo r);
@@ -47,7 +46,7 @@ void write1book(FILE* f, bookInfo& r);
 void insertbook(bookInfo& r);
 void writeRList(bList& l);
 void deletebook(bList& l);
-void FindID(bList& l);
+void FindISBN(bList& l);
 void changeInfodisplay();
 void changeInfo(bookInfo& r);
-void changeInfobyID(bList& l);
+void changeInfobyISBN(bList& l);
