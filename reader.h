@@ -38,11 +38,11 @@ struct rList
 };
 void init_rList(rList& l);
 rNode* createReader(readersInfo a);
-int FindX(char i[], rList l);
-int Len(rList L);
-void deleteHead(rList& d);
-void deleteTail(rList& d);
-void deleteAt(rList& L, int k);
+int FindrX(char i[], rList l);
+int rLen(rList L);
+void deleterHead(rList& d);
+void deleterTail(rList& d);
+void deleterAt(rList& L, int k);
 date today();
 date expDay();
 void insertTail(rList& l, readersInfo a);
