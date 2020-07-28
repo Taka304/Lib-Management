@@ -2,6 +2,7 @@
 #include <iostream>
 #include "borrowBook.h"
 #include "reader.h"
+#include "book.h"
 using namespace std;
 
 struct babInfo
@@ -13,9 +14,11 @@ struct babInfo
 	int amount;
 	ISBNList l;
 	int lateDay;
-	//them vu mat sach nua roi cong tong tien lai
+	int lostCount;
+	int fee;
 	int money;
 };
+
 bool KiemTraNamNhuan(int nam)
 {
 	if (nam % 4 == 0)
@@ -41,6 +44,7 @@ bool KiemTraNamNhuan(int nam)
 		return false;
 	}
 }
+
 int TinhChenhLechNgay(int ngay1, int thang1, int nam1, int ngay2, int thang2, int nam2)
 {
 	int quynam1 = 0, quynam2 = 0, quythang1 = 0, quythang2 = 0, quyngay1, quyngay2, chenhlech;
@@ -109,6 +113,24 @@ int TinhChenhLechNgay(int ngay1, int thang1, int nam1, int ngay2, int thang2, in
 	chenhlech = (quynam2 + quythang2 + quyngay2) - (quynam1 + quythang1 + quyngay1);
 	return chenhlech;
 }
+
+//Kiem tra sach bi mat
+int lostFee(bList l, ISBNList il)
+{
+	ISBNNode* p;
+	bNode* a;
+	for (p = il.head; p != NULL; p = p->next)
+	{
+		for (a = l.head; a != NULL; a = a->next)
+		{
+			if (strcmp(p->ISBN, a->info.ISBN) == 0)
+			return (a->info.cost)*2;
+		}
+	}
+	delete[]p;
+	delete[]a;
+}
+
 //tao phieu tra
 void createBaBook(babInfo& b)
 {
@@ -130,6 +152,14 @@ void createBaBook(babInfo& b)
 	cout << "Nhap so luong sach muon: ";
 	cin >> b.amount;
 	ISBNList_in(b.l, b.amount);
+	cout << "Nhap so luong sach bi mat: ";
+	cin >> b.lostCount;
+	bList l;
+	readBList(l);
+	for (int i = 1; i <= b.lostCount; i++)
+	{
+		b.fee += lostFee(l, b.l);
+	}
 	int Late = TinhChenhLechNgay(b.exBackDate.day, b.exBackDate.month, b.exBackDate.year, b.reBackDate.day, b.reBackDate.month, b.reBackDate.year);
-	int money = Late * 5000 * b.amount;
+	int money = Late * 5000 * b.amount + b.fee;
 }
