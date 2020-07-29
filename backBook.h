@@ -1,5 +1,6 @@
 #pragma once
-
+#include "reader.h"
+#include "borrowBook.h"
 struct babInfo
 {
 	char rID[MAX_RID];
@@ -10,6 +11,7 @@ struct babInfo
 	ISBNList l;
 	int lateDay;
 	int lostCount;
+	ISBNList lost;
 	int fee;
 	int money;
 };
@@ -20,6 +22,14 @@ int TinhChenhLechNgay(int ngay1, int thang1, int nam1, int ngay2, int thang2, in
 
 int lostFee(bList l, ISBNList il);
 
-void deleteBorrow(bobList& l);
+bobNode* findBorrowByRId(bobList l, char* id);
 
-void createBaBook(babInfo& b);
+bobNode* findBeforeBorrowByid(bobList l, char* id);
+
+void deleteBorrow(bobList& l, char *id);
+
+void ISBNLostList_in(ISBNList& l, int n);
+
+void createBaBook(babInfo& b, bobInfo bo);
+
+void backBookOut(babInfo b);

@@ -233,7 +233,7 @@ userInfo ChangeFullName(userInfo a, char* nname)
 	writeList(l);
 	return b;
 }
-void ChangeBirthDay(userInfo &a, date nb)
+void ChangeBirthDay(userInfo& a, date nb)
 {
 	uList l;
 	init_uList(l);
@@ -470,7 +470,7 @@ void menuExpert()
 int main()
 {
 	userInfo a;
-	a= createUser();
+	a = createUser();
 	addUserToFile(a);
 	userInfo b = Login();
 	changeInfo(b);

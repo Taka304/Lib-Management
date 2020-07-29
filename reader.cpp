@@ -419,7 +419,7 @@ void changeInfobyID(rList& l)
 }
 
 //tach danh sach theo ho ten
-void FindBookByName(rList l, rList &l2)
+void FindBookByName(rList l, rList& l2)
 {
 	rNode* p;
 	char name[MAX_RNAME];
@@ -454,7 +454,7 @@ void bookOut(rList l, int i)
 		dem++;
 		if (dem == i)
 		{
-			
+
 		}
 	}
 }

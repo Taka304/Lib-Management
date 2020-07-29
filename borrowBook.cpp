@@ -11,16 +11,16 @@ void init_ISBNList(ISBNList& l)
 }
 
 //tao node id sach
-ISBNNode * createISBNNode(char *x)
+ISBNNode* createISBNNode(char* x)
 {
 	ISBNNode* node = new ISBNNode;
-	strcpy(node->ISBN,x);
+	strcpy(node->ISBN, x);
 	node->next = NULL;
 	return node;
 }
 
 //tao + them node id sach
-void addISBN(ISBNList& l, char *x)
+void addISBN(ISBNList& l, char* x)
 {
 	ISBNNode* node = createISBNNode(x);
 	if (l.head == NULL)
@@ -28,7 +28,7 @@ void addISBN(ISBNList& l, char *x)
 		l.head = node;
 		return;
 	}
-	ISBNNode *tail = findTailISBNList(l);
+	ISBNNode* tail = findTailISBNList(l);
 	tail->next = node;
 }
 
@@ -48,7 +48,7 @@ bobNode* createBorrowNode(bobInfo b)
 }
 
 //tim duoi borrow
-bobNode * findTailBorrowList(bobList l)
+bobNode* findTailBorrowList(bobList l)
 {
 	for (bobNode* p = l.head; p; p = p->next)
 	{
@@ -114,7 +114,7 @@ void ISBNList_out(ISBNList l)
 	for (ISBNNode* p = l.head; p; p = p->next)
 	{
 		dem++;
-		cout << dem<<". "<<p->ISBN << endl;
+		cout << dem << ". " << p->ISBN << endl;
 	}
 }
 
@@ -123,10 +123,8 @@ void createBoBook(bobInfo& b)
 {
 	cout << "Nhap ma doc gia: ";
 	cin >> b.rID;
-	cout << "Nhap ngay thang nam muon sach: ";
-	cin >> b.borrowDate.day;
-	cin >> b.borrowDate.month;
-	cin >> b.borrowDate.year;
+	cout << "Ngay thang nam muon sach: ";
+	b.borrowDate = today();
 	cout << "Ngay tra du kien: ";
 	cin >> b.exBackDate.day;
 	cin >> b.exBackDate.month;
@@ -172,12 +170,12 @@ void readBorrowBook(bobInfo& b, FILE* f)
 }
 
 //ghi phieu muon vao file
-void addBorrowBook(bobInfo b, FILE *f)
+void addBorrowBook(bobInfo b, FILE* f)
 {
-	fprintf(f, "%s,%d/%d/%d,%d/%d/%d,%d", b.rID,b.borrowDate,b.exBackDate, b.amount);
+	fprintf(f, "%s,%d/%d/%d,%d/%d/%d,%d", b.rID, b.borrowDate, b.exBackDate, b.amount);
 	for (ISBNNode* p = b.l.head; p; p = p->next)
 	{
-		fprintf(f, ",%s",p->ISBN);
+		fprintf(f, ",%s", p->ISBN);
 	}
 	fprintf(f, "\n");
 }

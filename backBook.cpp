@@ -112,46 +112,95 @@ int lostFee(bList l, ISBNList il)
 		for (a = l.head; a != NULL; a = a->next)
 		{
 			if (strcmp(p->ISBN, a->info.ISBN) == 0)
-			return (a->info.cost)*2;
+				return (a->info.cost) * 2;
 		}
 	}
 }
-//tra sach ve thu vien
-void deleteBorrow(bobList& l)
-{
 
+//Tim node phieu muon chua ma doc gia da cho
+bobNode* findBorrowByRId(bobList l, char* id)
+{
+	for (bobNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->info.rID, id) == 0)
+		{
+			return p;
+		}
+	}
+	return NULL;
 }
 
-
-//tao phieu tra
-void createBaBook(babInfo& b)
+//Tim node truoc node phieu muon chua ma doc gia da cho
+bobNode* findBeforeBorrowByid(bobList l, char* id)
 {
-	cout << "Nhap ma doc gia: ";
-	cin >> b.rID;
-	cout << "Nhap ngay, thang, nam muon sach: ";
-	cin >> b.borrowDate.day;
-	cin >> b.borrowDate.month;
-	cin >> b.borrowDate.year;
-	cout << "Ngay thang nam tra du kien: ";
-	cin >> b.exBackDate.day;
-	cin >> b.exBackDate.month;
-	cin >> b.exBackDate.year;
-	cout << "Ngay tra thuc te: ";
-	cin >> b.reBackDate.day;
-	cin >> b.reBackDate.month;
-	cin >> b.reBackDate.year;
+	for (bobNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->next->info.rID, id) == 0)
+		{
+			return p;
+		}
+	}
+	return NULL;
+}
+
+//tra sach ve thu vien
+void deleteBorrow(bobList& l, char *id)
+{
+	bobNode* temp1 = findBorrowByRId(l, id);
+	bobNode * temp2 = findBeforeBorrowByid(l, id);
+	temp2->next = temp1->next;
+	temp1->next = NULL;
+	delete temp1;
+}
+ 
+//list sach mat
+void ISBNLostList_in(ISBNList& l, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		char id[MAX_BID];
+		cout << "Nhap id sach: ";
+		cin >> id;
+		addISBN(l, id);
+	}
+}
+//tao phieu tra
+void createBaBook(babInfo& b, bobInfo bo)
+{
+	strcpy(b.rID, bo.rID);
+	b.borrowDate = bo.borrowDate;
+	b.exBackDate = bo.exBackDate;
+	b.reBackDate = today();
 	init_ISBNList(b.l);
-	cout << "Nhap so luong sach muon: ";
-	cin >> b.amount;
-	ISBNList_in(b.l, b.amount);
+	b.amount = bo.amount;
+	b.l = bo.l;
 	cout << "Nhap so luong sach bi mat: ";
 	cin >> b.lostCount;
+	init_ISBNList(b.lost);
+	ISBNLostList_in(b.lost, b.lostCount);
 	bList l;
 	readBList(l);
 	for (int i = 1; i <= b.lostCount; i++)
 	{
-		b.fee += lostFee(l, b.l);
+		b.fee += lostFee(l, b.lost);
 	}
-	int Late = TinhChenhLechNgay(b.exBackDate.day, b.exBackDate.month, b.exBackDate.year, b.reBackDate.day, b.reBackDate.month, b.reBackDate.year);
-	int money = Late * 5000 * b.amount + b.fee;
+	b.lateDay = TinhChenhLechNgay(b.reBackDate.day, b.reBackDate.month, b.reBackDate.year, b.exBackDate.day, b.exBackDate.month, b.exBackDate.year);
+	b.money = b.lateDay * 5000 * b.amount + b.fee;
+}
+
+//in phieu tra
+void backBookOut(babInfo b)
+{
+	cout << "Ma doc gia: " << b.rID << endl;
+	cout << "Ngay muon sach: " << b.borrowDate.day << "/" << b.borrowDate.month << "/" << b.borrowDate.year << endl;
+	cout << "Ngay tra sach du kien: " << b.exBackDate.day << "/" << b.exBackDate.month << "/" << b.exBackDate.year << endl;
+	cout << "Ngay tra sach thuc te: " << b.reBackDate.day << "/" << b.reBackDate.month << "/" << b.reBackDate.year << endl;
+	cout << "So luong sach muon: " << b.amount << endl;
+	cout << "Danh sach sach muon: " << endl;
+	ISBNList_out(b.l);
+	cout << "So sach mat: " << b.lostCount << endl;
+	cout << "Danh sach sach mat: " << endl;
+	ISBNList_out(b.lost);
+	cout << "So ngay tre han: " << b.lateDay << endl;
+	cout << "So tien phai tra: " << b.money << endl;
 }
