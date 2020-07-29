@@ -3,21 +3,9 @@
 #include "borrowBook.h"
 #include "reader.h"
 #include "book.h"
+#include "backBook.h"
 using namespace std;
 
-struct babInfo
-{
-	char rID[MAX_RID];
-	date borrowDate;
-	date exBackDate;
-	date reBackDate;
-	int amount;
-	ISBNList l;
-	int lateDay;
-	int lostCount;
-	int fee;
-	int money;
-};
 
 bool KiemTraNamNhuan(int nam)
 {
@@ -127,9 +115,13 @@ int lostFee(bList l, ISBNList il)
 			return (a->info.cost)*2;
 		}
 	}
-	delete[]p;
-	delete[]a;
 }
+//tra sach ve thu vien
+void deleteBorrow(bobList& l)
+{
+
+}
+
 
 //tao phieu tra
 void createBaBook(babInfo& b)

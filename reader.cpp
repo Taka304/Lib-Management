@@ -227,9 +227,8 @@ void infoIn(readersInfo& r)
 	cin >> r.bDay.day;
 	cin >> r.bDay.month;
 	cin >> r.bDay.year;
-	cout << "Gioi tinh: ";
-	fgetc(stdin);
-	cin.getline(r.sex, sizeof(r.sex));
+	cout << "Gioi tinh(1: Nu, 2: Nam): ";
+	cin >> r.sex;
 	cout << "Dia chi: ";
 	cin.getline(r.address, sizeof(r.address));
 	r.createdDay = today();
@@ -370,10 +369,14 @@ void changeInfo(readersInfo& r)
 		}
 		case 4:
 		{
-			char i[MAX_RSEX];
-			cout << "Nhap gioi tinh moi: ";
-			cin >> i;
-			strcpy(r.sex, i);
+			if (r.sex == 1)
+			{
+				r.sex = 2;
+			}
+			else
+			{
+				r.sex = 1;
+			}
 			break;
 		}
 		case 5:

@@ -361,10 +361,10 @@ void changeInfo(bookInfo& r)
 		}
 		case 6:
 		{
-			char i[MAX_BCOST];
+			int i;
 			cout << "Nhap gia moi: ";
 			cin >> i;
-			strcpy(r.cost, i);
+			r.cost = i;
 			break;
 		}
 		case 7:

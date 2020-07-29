@@ -28,6 +28,7 @@ struct bList
 {
 	bNode* head;
 };
+
 void init_bList(bList& l);
 bNode* createbook(bookInfo a);
 int FindbX(char i[], bList l);

@@ -19,7 +19,7 @@ struct readersInfo
 	char fullname[MAX_RNAME];
 	char cmnd[MAX_RCMND];
 	date bDay;
-	char sex[MAX_RSEX];
+	int sex;
 	char email[MAX_REMAIL];
 	char address[MAX_RADDRESS];
 	date createdDay;

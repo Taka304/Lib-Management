@@ -179,7 +179,61 @@ userInfo Login()
 	return a; //Them menu co quyen su dung sau
 }
 // doi mat khau
-void ChangePassword(userInfo a, char* np)
+userInfo ChangePassword(userInfo a, char* np)
+{
+	uList l;
+	init_uList(l);
+	readUserFile(l);
+	userInfo b;
+	for (uNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->info.userName, a.userName) == 0)
+		{
+			strcpy(b.userName, p->info.userName);
+			strcpy(b.passWord, np);
+			strcpy(b.fullName, p->info.fullName);
+			strcpy(b.identityID, p->info.identityID);
+			b.birthDay.day = p->info.birthDay.day;
+			b.birthDay.month = p->info.birthDay.month;
+			b.birthDay.year = p->info.birthDay.year;
+			strcpy(b.address, p->info.address);
+			b.permiss = p->info.permiss;
+			b.sex = p->info.sex;
+			b.status = p->info.status;
+			p->info = b;
+		}
+	}
+	writeList(l);
+	return b;
+}
+userInfo ChangeFullName(userInfo a, char* nname)
+{
+	uList l;
+	init_uList(l);
+	readUserFile(l);
+	userInfo b;
+	for (uNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->info.userName, a.userName) == 0)
+		{
+			strcpy(b.userName, p->info.userName);
+			strcpy(b.passWord, p->info.passWord);
+			strcpy(b.fullName, nname);
+			strcpy(b.identityID, p->info.identityID);
+			b.birthDay.day = p->info.birthDay.day;
+			b.birthDay.month = p->info.birthDay.month;
+			b.birthDay.year = p->info.birthDay.year;
+			strcpy(b.address, p->info.address);
+			b.permiss = p->info.permiss;
+			b.sex = p->info.sex;
+			b.status = p->info.status;
+			p->info = b;
+		}
+	}
+	writeList(l);
+	return b;
+}
+void ChangeBirthDay(userInfo &a, date nb)
 {
 	uList l;
 	init_uList(l);
@@ -188,7 +242,81 @@ void ChangePassword(userInfo a, char* np)
 	{
 		if (strcmp(p->info.userName, a.userName) == 0)
 		{
-			strcpy(p->info.passWord, np);
+			a.birthDay = nb;
+			p->info.birthDay = nb;
+		}
+	}
+	writeList(l);
+}
+userInfo ChangeIdentity(userInfo a, char* ni)
+{
+	uList l;
+	init_uList(l);
+	readUserFile(l);
+	userInfo b;
+	for (uNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->info.userName, a.userName) == 0)
+		{
+			strcpy(b.userName, p->info.userName);
+			strcpy(b.passWord, p->info.passWord);
+			strcpy(b.fullName, p->info.fullName);
+			strcpy(b.identityID, ni);
+			b.birthDay.day = p->info.birthDay.day;
+			b.birthDay.month = p->info.birthDay.month;
+			b.birthDay.year = p->info.birthDay.year;
+			strcpy(b.address, p->info.address);
+			b.permiss = p->info.permiss;
+			b.sex = p->info.sex;
+			b.status = p->info.status;
+			p->info = b;
+		}
+	}
+	writeList(l);
+	return b;
+}
+userInfo ChangeAddress(userInfo a, char* na)
+{
+	uList l;
+	init_uList(l);
+	readUserFile(l);
+	userInfo b;
+	for (uNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->info.userName, a.userName) == 0)
+		{
+			strcpy(b.userName, p->info.userName);
+			strcpy(b.passWord, p->info.passWord);
+			strcpy(b.fullName, p->info.fullName);
+			strcpy(b.identityID, p->info.identityID);
+			b.birthDay.day = p->info.birthDay.day;
+			b.birthDay.month = p->info.birthDay.month;
+			b.birthDay.year = p->info.birthDay.year;
+			strcpy(b.address, na);
+			b.permiss = p->info.permiss;
+			b.sex = p->info.sex;
+			b.status = p->info.status;
+			p->info = b;
+		}
+	}
+	writeList(l);
+	return b;
+}
+void ChangeSex(userInfo& a)
+{
+	uList l;
+	init_uList(l);
+	readUserFile(l);
+	for (uNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->info.userName, a.userName) == 0)
+		{
+			if (a.sex == 1)
+			{
+				a.sex = 2;
+			}
+			else
+				a.sex = 1;
 		}
 	}
 	writeList(l);
@@ -242,7 +370,7 @@ void addUserToFile(userInfo a)
 }
 bool checkPassWord(userInfo a, char* p)
 {
-	if (strcmp(a.passWord, p))
+	if (strcmp(a.passWord, p) == 0)
 		return true;
 	return false;
 }
@@ -265,7 +393,7 @@ void changeInfo(userInfo a)
 		{
 		case 1:
 		{
-			char op[MAX_PASSWORD + 1], np[MAX_PASSWORD + 1];
+			char op[MAX_PASSWORD], np[MAX_PASSWORD];
 			cout << "Xac nhan mat khau cu:" << endl;
 			cout << "Nhap mat khau cu: ";
 			insertPassword(op);
@@ -274,6 +402,7 @@ void changeInfo(userInfo a)
 				cout << "Nhap mat khau moi: " << endl;
 				insertPassword(np);
 				ChangePassword(a, np);
+				break;
 			}
 			while (!checkPassWord(a, op))
 			{
@@ -282,11 +411,46 @@ void changeInfo(userInfo a)
 			}
 			cout << "Nhap mat khau moi: " << endl;
 			insertPassword(np);
-			ChangePassword(a, np);
+			a = ChangePassword(a, np);
+			break;
 		}
 		case 2:
 		{
-
+			char nname[MAX_NAME];
+			cout << "Nhap ho va ten moi: ";
+			cin.getline(nname, MAX_NAME);
+			a = ChangeFullName(a, nname);
+			break;
+		}
+		case 3:
+		{
+			date nBirthDay;
+			cout << "Nhap ngay thang nam sinh moi: ";
+			cin >> nBirthDay.day;
+			cin >> nBirthDay.month;
+			cin >> nBirthDay.year;
+			ChangeBirthDay(a, nBirthDay);
+			break;
+		}
+		case 4:
+		{
+			char nidentity[MAX_CMND];
+			cout << "Nhap CMND moi: ";
+			cin >> nidentity;
+			a = ChangeIdentity(a, nidentity);
+			break;
+		}
+		case 5:
+		{
+			char naddress[MAX_ADDRESS];
+			cout << "Nhap dia chi moi: ";
+			cin.getline(naddress, MAX_ADDRESS);
+			a = ChangeAddress(a, naddress);
+			break;
+		}
+		case 6:
+		{
+			ChangeSex(a);
 		}
 		}
 	}
@@ -303,15 +467,12 @@ void menuExpert()
 {
 	//
 }
-/*int main()
+int main()
 {
 	userInfo a;
 	a= createUser();
 	addUserToFile(a);
 	userInfo b = Login();
-	char np[MAX_PASSWORD+1];
-	cout << "Nhap mat khau moi: ";
-	cin >> np;
-	//ChangePassword(b, np);
+	changeInfo(b);
 	//Login();
-}*/
+}

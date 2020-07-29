@@ -30,6 +30,10 @@ struct bobList
 {
 	bobNode* head;
 };
+void init_borrowLinkedList(bobList& l);
+bobNode* createBorrowNode(bobInfo b);
+bobNode* findTailBorrowList(bobList l);
+void addBorrow(bobList& l, bobInfo b);
 void init_ISBNList(ISBNList& l);
 ISBNNode* createISBNNode(char* x);
 void addISBN(ISBNList& l, char* x);
