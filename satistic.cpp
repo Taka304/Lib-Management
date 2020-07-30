@@ -116,8 +116,17 @@ void sexCount(rList r)
 }
 
 //so sach dang duoc muon
-int countBorrowBook(bobList l)
+int countBorrowBook(bobList &l)
 {
+	FILE* f = fopen("borrowbook.csv", "r");
+	if (!f)
+	{
+		cout << "Khong mo duoc.";
+		return 0;
+	}
+	init_borrowLinkedList(l);
+	readBorrowBook(l,f);
+	fclose(f);
 	int dem = 0;
 	for (bobNode* p = l.head; p; p = p->next)
 	{
@@ -129,7 +138,17 @@ int countBorrowBook(bobList l)
 //Danh sach doc gia tre hen
 void lateReader(bobList l)
 {
+	FILE* f = fopen("borrowbook.csv", "r");
+	if (!f)
+	{
+		cout << "Khong mo duoc.";
+		return;
+	}
+	init_borrowLinkedList(l);
+	readBorrowBook(l, f);
+	fclose(f);
 	date td = today();
+	cout << "Danh sach doc gia tre han: " << endl;
 	for (bobNode* p = l.head; p; p = p->next)
 	{
 		int late = TinhChenhLechNgay(td.day, td.month, td.year, p->info.exBackDate.day, p->info.exBackDate.month, p->info.exBackDate.year);

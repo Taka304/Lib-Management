@@ -170,7 +170,6 @@ userInfo findUserByUserName(uList l, char* uname)
 		}
 	}
 }
-
 userInfo Login()
 {
 	userInfo a;
@@ -392,7 +391,7 @@ bool checkPassWord(userInfo a, char* p)
 		return true;
 	return false;
 }
-void changeInfo(userInfo& a)
+void changeInfo(userInfo &a)
 {
 	int cases = -1;
 	while (cases != 0)
@@ -486,7 +485,7 @@ void UserInfoOut(userInfo a)
 		cout << "Admin" << endl;
 	}
 }
-void menuUAdmin(userInfo& a)
+void menuUAdmin(userInfo &a)
 {
 	int cases = -1;
 	while (cases != 0)
@@ -546,7 +545,7 @@ void menuUAdmin(userInfo& a)
 		}
 	}
 }
-void menuUManager(userInfo& a)
+void menuUManager(userInfo &a)
 {
 	int cases = -1;
 	while (cases != 0)
@@ -599,7 +598,7 @@ void menuUManager(userInfo& a)
 		}
 	}
 }
-void menuUExpert(userInfo& a)
+void menuUExpert(userInfo &a)
 {
 	int cases = -1;
 	while (cases != 0)

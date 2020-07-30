@@ -64,7 +64,7 @@ void changeInfo(readersInfo& r);
 void changeInfobyID(rList& l);
 void FindBookByName(rList l, rList& l2);
 void NameByIdOut(rList l);
-void bookOut(rList l, int i);
+void bookOut(rList l, char *id);
 
 void menu2Display();
 

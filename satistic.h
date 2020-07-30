@@ -37,6 +37,6 @@ int readerCount(rList l);
 
 void sexCount(rList r);
 
-int countBorrowBook(bobList l);
+int countBorrowBook(bobList& l);
 
 void lateReader(bobList l);

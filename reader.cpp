@@ -455,30 +455,29 @@ void FindBookByName(rList l, rList& l2)
 //in danh sach ho ten trung kem id
 void NameByIdOut(rList l)
 {
-	int dem = 0;
 	for (rNode* p = l.head; p; p = p->next)
 	{
-		dem++;
-		cout << dem << ". ID: " << p->info.ID << ", ho va ten: " << p->info.fullname;
+		cout << ". ID: " << p->info.ID << ", ho va ten: " << p->info.fullname;
 	}
 }
 
 //in sach theo ho ten va id da chon
-void bookOut(rList l, int i)
+void bookOut(rList l, char * id)
 {
-	int dem = 0;
 	FILE* f = fopen("borrowbook.csv", "r");
 	bobList l1;
 	init_borrowLinkedList(l1);
 	readBorrowBook(l1, f);
-	for (rNode* p = l.head; p; p = p->next)
+	bobNode *temp = findBorrowByRId(l1, id);
+	if (temp == NULL)
 	{
-		dem++;
-		if (dem == i)
-		{
-			bobNode *temp = findBorrowByRId(l1, p->info.ID);
-			ISBNList_out(temp->info.l);
-		}
+		cout << "Doc gia khong muon sach.";
+	}
+	else
+	{
+		cout << "So sach muon: " << temp->info.amount << endl;
+		cout << "Danh sach sach muon: " << endl;
+		ISBNList_out(temp->info.l);
 	}
 }
 
