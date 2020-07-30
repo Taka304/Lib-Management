@@ -39,6 +39,8 @@ void addISBN(ISBNList& l, char* x);
 
 void init_borrowLinkedList(bobList& l);
 
+bool checkRID(bobList l, char* id);
+
 bobNode* createBorrowNode(bobInfo b);
 
 bobNode* findTailBorrowList(bobList l);
