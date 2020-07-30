@@ -118,11 +118,31 @@ void ISBNList_out(ISBNList l)
 	}
 }
 
+//check rId
+bool checkRID(bobList l, char* id)
+{
+	for (bobNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->info.rID, id) == 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 //tao phieu muon
 void createBoBook(bobInfo& b, FILE* f)
 {
+	bobList borrowList;
+	init_borrowLinkedList(borrowList);
+	readBorrowBook(borrowList, f);
 	cout << "Nhap ma doc gia: ";
 	cin >> b.rID;
+	if (checkRID)
+	{
+		cout << "Doc gia nay da muon sach." << endl;
+		return;
+	}
 	cout << "Ngay thang nam muon sach: ";
 	cin >> b.borrowDate.day;
 	cin >> b.borrowDate.month;
@@ -134,9 +154,6 @@ void createBoBook(bobInfo& b, FILE* f)
 	init_ISBNList(b.l);
 	cout << "Nhap so luong sach muon: ";
 	cin >> b.amount;
-	bobList borrowList;
-	init_borrowLinkedList(borrowList);
-	readBorrowBook(borrowList, f);
 	ISBNList_in(borrowList, b.l, b.amount);
 }
 
