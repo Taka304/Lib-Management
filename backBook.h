@@ -1,6 +1,7 @@
 #pragma once
 #include "reader.h"
 #include "borrowBook.h"
+
 struct babInfo
 {
 	char rID[MAX_RID];

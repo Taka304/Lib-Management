@@ -1,5 +1,5 @@
 #pragma once
-#define MAX_RID 9
+#define MAX_RID 10
 #define MAX_RNAME 50
 #define MAX_REMAIL 50
 #define MAX_RCMND 13
@@ -45,7 +45,7 @@ void deleterTail(rList& d);
 void deleterAt(rList& L, int k);
 date today();
 date expDay();
-void insertTail(rList& l, readersInfo a);
+void insertrTail(rList& l, readersInfo a);
 void readDate(FILE* filename, date& a);
 void read1Reader(FILE* f, readersInfo& r);
 void readRList(rList& l);
@@ -54,7 +54,9 @@ void readerListout(rList l);
 void infoIn(readersInfo& r);
 void writeDate(FILE* f, date a);
 void write1Reader(FILE* f, readersInfo& r);
-void insertReader(readersInfo& r);
+void toStr(int n, readersInfo r);
+void insertReader(readersInfo& r, rList& l);
+void insertReader(readersInfo& r, rList& l);
 void deleteReader(rList& l);
 void FindCMND(rList& l);
 void changeInfodisplay();
@@ -63,3 +65,7 @@ void changeInfobyID(rList& l);
 void FindBookByName(rList l, rList& l2);
 void NameByIdOut(rList l);
 void bookOut(rList l, int i);
+
+void menu2Display();
+
+void menu2Option();

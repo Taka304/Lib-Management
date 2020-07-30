@@ -48,6 +48,6 @@ void insertbook(bookInfo& r);
 void writeRList(bList& l);
 void deletebook(bList& l);
 void FindISBN(bList& l);
-void changeInfodisplay();
-void changeInfo(bookInfo& r);
+void changebInfodisplay();
+void changebInfo(bookInfo& r);
 void changeInfobyISBN(bList& l);

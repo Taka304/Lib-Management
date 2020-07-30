@@ -172,7 +172,7 @@ void readBorrowBook(bobInfo& b, FILE* f)
 //ghi phieu muon vao file
 void addBorrowBook(bobInfo b, FILE* f)
 {
-	fprintf(f, "%s,%d/%d/%d,%d/%d/%d,%d", b.rID, b.borrowDate, b.exBackDate, b.amount);
+	fprintf(f, "%s,%d/%d/%d,%d/%d/%d,%d", b.rID, b.borrowDate.day, b.borrowDate.month, b.borrowDate.year, b.exBackDate.day, b.exBackDate.month, b.exBackDate.year, b.amount);
 	for (ISBNNode* p = b.l.head; p; p = p->next)
 	{
 		fprintf(f, ",%s", p->ISBN);

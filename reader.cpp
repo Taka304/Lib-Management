@@ -121,7 +121,7 @@ date expDay()
 }
 
 //Nhap doc gia vao cuoi danh sach
-void insertTail(rList& l, readersInfo a)
+void insertrTail(rList& l, readersInfo a)
 {
 	rNode* newReader = createReader(a);
 	if (l.head == NULL)
@@ -185,7 +185,7 @@ void readRList(rList& l)
 	{
 		readersInfo r;
 		read1Reader(f, r);
-		insertTail(l, r);
+		insertrTail(l, r);
 	}
 	fclose(f);
 }
@@ -217,8 +217,6 @@ void readerListout(rList l)
 //nhap thong tin doc gia
 void infoIn(readersInfo& r)
 {
-	cout << "ID: ";
-	cin.getline(r.ID, sizeof(r.ID));
 	cout << "Ho ten: ";
 	cin.getline(r.fullname, sizeof(r.fullname));
 	cout << "CMND: ";
@@ -251,10 +249,23 @@ void write1Reader(FILE* f, readersInfo& r)
 	writeDate(f, r.exDay);
 }
 
-//Nhap thong tin 1 doc gia vao cuoi file
-void insertReader(readersInfo& r)
+void toStr(int n, readersInfo r)
 {
+	char str[10];
+	r.ID[0] = '\0';
+	int count = 9 - strlen(str);
+	while (count > 0)
+	{
+		strcat(r.ID, "0");
+		count--;
+	}
+	strcat(r.ID, str);
+	r.ID[9] = '\0';
+}
 
+//Nhap thong tin 1 doc gia vao cuoi file
+void insertReader(readersInfo& r, rList &l)
+{
 	FILE* f = fopen("reader.txt", "a");
 	if (!f)
 	{
@@ -262,6 +273,15 @@ void insertReader(readersInfo& r)
 		return;
 	}
 	infoIn(r);
+	for (rNode* k = l.head; k != NULL; k = k->next)
+	{
+		if (k->next == NULL)
+		{
+			int tmp = int(k->info.ID) - 48;
+			tmp++;
+			toStr(tmp,r);
+		}
+	}
 	write1Reader(f, r);
 	fclose(f);
 }
@@ -269,8 +289,6 @@ void insertReader(readersInfo& r)
 //xoa thong tin 1 doc gia
 void deleteReader(rList& l)
 {
-
-	readRList(l);
 	char newID[MAX_RID];
 	cout << "Nhap Id can xoa: ";
 	cin >> newID;
@@ -304,7 +322,6 @@ void FindCMND(rList& l)
 	char i[MAX_RCMND];
 	cout << "Nhap cmnd: ";
 	cin >> i;
-	readRList(l);
 	for (p = l.head; p != NULL; p = p->next)
 	{
 		if (strcmp(p->info.cmnd, i) == 0)
@@ -406,7 +423,6 @@ void changeInfobyID(rList& l)
 	char i[MAX_RID];
 	cout << "Nhap ID: ";
 	cin >> i;
-	readRList(l);
 	for (p = l.head; p != NULL; p = p->next)
 	{
 		if (strcmp(p->info.ID, i) == 0)
@@ -429,7 +445,7 @@ void FindBookByName(rList l, rList& l2)
 	{
 		if (strcmp(p->info.fullname, name) == 0)
 		{
-			insertTail(l2, p->info);
+			insertrTail(l2, p->info);
 		}
 	}
 }
@@ -457,4 +473,62 @@ void bookOut(rList l, int i)
 
 		}
 	}
+}
+
+void menu2Display()
+{
+	cout << "Nhan 1 de xem danh sach doc gia trong thu vien" << endl;
+	cout << "Nhan 2 de them doc gia" << endl;
+	cout << "Nhan 3 de ching sua thong tin doc gia" << endl;
+	cout << "Nhan 4 de xoa thong tin doc gia" << endl;
+	cout << "Nhan 5 de tim kiem doc gia theo CMND" << endl;
+	cout << "Nhan 6 de tim kiem sach theo ho ten" << endl;
+	cout << "Nhan bat ky de tro lai menu" << endl;
+	cout << "Lua chon cua ban: ";
+}
+
+void menu2Option()
+{
+	int option;
+	do
+	{
+		rList l;
+		readRList(l);
+		system("cls");
+		changeInfodisplay();
+		cin >> option;
+		switch (option)
+		{
+		case 1:
+		{
+			readerListout(l);
+		}
+		case 2:
+		{
+			readersInfo a;
+			insertReader(a,l);
+		}
+		case 3:
+		{
+			changeInfobyID(l);
+		}
+		case 4:
+		{
+			deleteReader(l);
+		}
+		case 5:
+		{
+			FindCMND(l);
+		}
+		case 6:
+		{
+
+		}
+		}
+	} while (option > 0 && option <= 6);
+}
+
+int main()
+{
+	menu2Option();
 }

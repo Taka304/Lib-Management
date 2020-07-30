@@ -1,29 +1,14 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 #include "book.h"
 #include "reader.h"
 #include "borrowBook.h"
 #include "backBook.h"
+#include "satistic.h"
 
 using namespace std;
 
 //Len de dem book
-
-struct bookType
-{
-	char type[50];
-	int count;
-};
-
-struct btNode
-{
-	bookType info;
-	btNode* next;
-};
-
-struct btList
-{
-	btNode* head;
-};
 
 btNode* createbookt(bookType a)
 {
@@ -31,6 +16,14 @@ btNode* createbookt(bookType a)
 	p->info = a;
 	p->next = NULL;
 	return p;
+}
+
+//dem so sach trong thu vien
+int bookCount(bList l)
+{
+	readBList(l);
+	int count = bLen(l);
+	return count;
 }
 
 void insertbtTail(btList& l, bookType a)
@@ -50,7 +43,21 @@ void insertbtTail(btList& l, bookType a)
 	return;
 }
 
-void typeIn(bList l, btList& b)
+int btLen(btList L)
+{
+	btNode* PH = L.head;
+	int i = 0;
+	if (PH != NULL) i = 1;
+	while (PH != NULL)
+	{
+		if (PH == NULL) break;
+		PH = PH->next;
+		i++;
+	}
+	return i;
+}
+
+int bookTypeCount(bList l, btList& b)
 {
 	readBList(l);
 	for (bNode* p = l.head; p != NULL; p = p->next)
@@ -66,16 +73,22 @@ void typeIn(bList l, btList& b)
 			{
 				bookType a;
 				a.count = 1;
-				strcat(a.type, p->info.type);
+				strcpy(a.type, p->info.type);
 				insertbtTail(b, a);
 			}
 		}
 	}
+	int count = btLen(b);
+	return count;
 }
 
-//dem Len cua btList
-
 //Len cua reader
+int readerCount(rList l)
+{
+	readRList(l);
+	int count = rLen(l);
+	return count;
+}
 
 void sexCount(rList r)
 {

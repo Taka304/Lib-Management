@@ -143,7 +143,7 @@ void read1Book(FILE* f, bookInfo& r)
 	fgetc(f);
 	fscanf(f, "%[^,]", r.type);
 	fgetc(f);
-	fscanf(f, "%[^,]", r.cost);
+	fscanf(f, "%d%[^,]", r.cost);
 	fgetc(f);
 	fscanf(f, "%[^,]", r.num);
 	fgetc(f);
@@ -220,7 +220,7 @@ void infoIn(bookInfo& r)
 void write1book(FILE* f, bookInfo& r)
 {
 	fprintf(f, "%s,%s,%s,", r.ISBN, r.fullname, r.fullname);
-	fprintf(f, "%s,%s,%s,%s,%s,", r.nxb, r.pYear, r.type, r.cost, r.num);
+	fprintf(f, "%s,%s,%s,%d,%s,", r.nxb, r.pYear, r.type, r.cost, r.num);
 	fprintf(f, "\n");
 }
 
@@ -295,7 +295,7 @@ void FindISBN(bList& l)
 }
 
 //menu doi thong tin
-void changeInfodisplay()
+void changebInfodisplay()
 {
 	cout << "Nhan 1 de thay doi ten sach" << endl;
 	cout << "Nhan 2 de thay doi tac gia" << endl;
@@ -309,13 +309,13 @@ void changeInfodisplay()
 }
 
 //lua chon doi thong tin
-void changeInfo(bookInfo& r)
+void changebInfo(bookInfo& r)
 {
 	int option;
 	do
 	{
 		cout << endl;
-		changeInfodisplay();
+		changebInfodisplay();
 		cin >> option;
 		switch (option)
 		{
@@ -393,7 +393,7 @@ void changeInfobyISBN(bList& l)
 		{
 			cout << "Thong tin sach ban muon doi\n\n";
 			infoOut(p->info);
-			changeInfo(p->info);
+			changebInfo(p->info);
 			writeRList(l);
 			cout << "Doi thong tin thanh cong!";
 			return;
