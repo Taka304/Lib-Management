@@ -120,7 +120,26 @@ void menuReader()
 		}
 		case 6:
 		{
-
+			rList l1, l2;
+			init_rList(l1);
+			init_rList(l2);
+			readRList(l1);
+			FindBookByName(l1, l2);
+			int leng = rLen(l2);
+			if (leng == 1)
+			{
+				bookOut(l2, l2.head->info.ID);
+			}
+			else
+			{
+				NameByIdOut(l2);
+				char id[MAX_RID];
+				cout << "Nhap ma doc gia ban chon: ";
+				cin >> id;
+				bookOut(l2, id);
+			}
+			cout << "Nhan bat ky de quay tro lai";
+			break;
 		}
 		}
 	} while (option > 0 && option <= 6);
@@ -295,13 +314,16 @@ void menuSatistic()
 		}
 		case 5:
 		{
-
+			bobList l;
+			int count = countBorrowBook(l);
+			cout << "So sach dang duoc muon la: " << count << endl;
 			cout << "Nhan bat ky de quay tro lai";
 			break;
 		}
 		case 6:
 		{
-			
+			bobList l;
+			lateReader(l);
 			cout << "Nhan bat ky de quay tro lai";
 			break;
 		}
