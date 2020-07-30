@@ -1,6 +1,6 @@
 #pragma once
-#include "book.h"
-#include "borrowBook.h"
+
+
 struct bookType
 {
 	char type[50];
@@ -19,6 +19,8 @@ struct btList
 };
 
 
+void init_BTList(btList& l);
+
 btNode* createbookt(bookType a);
 
 int bookCount(bList l);
@@ -27,7 +29,9 @@ void insertbtTail(btList& l, bookType a);
 
 int btLen(btList L);
 
-int bookTypeCount(bList l, btList& b);
+void bookTypeCount(bList l, btList& b);
+
+void bookTypeList(btList l);
 
 int readerCount(rList l);
 

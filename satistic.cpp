@@ -9,6 +9,10 @@
 using namespace std;
 
 //Len de dem book
+void init_BTList(btList& l)
+{
+	l.head = NULL;
+}
 
 btNode* createbookt(bookType a)
 {
@@ -21,7 +25,6 @@ btNode* createbookt(bookType a)
 //dem so sach trong thu vien
 int bookCount(bList l)
 {
-	readBList(l);
 	int count = bLen(l);
 	return count;
 }
@@ -57,9 +60,8 @@ int btLen(btList L)
 	return i;
 }
 
-int bookTypeCount(bList l, btList& b)
+void bookTypeCount(bList l, btList& b)
 {
-	readBList(l);
 	for (bNode* p = l.head; p != NULL; p = p->next)
 	{
 		for (btNode* bt = b.head; bt != NULL; bt = bt->next)
@@ -78,21 +80,26 @@ int bookTypeCount(bList l, btList& b)
 			}
 		}
 	}
-	int count = btLen(b);
-	return count;
+}
+
+void bookTypeList(btList l)
+{
+	btNode* p;
+	for (p = l.head; p; p = p->next)
+	{
+		cout << p->info.type << ": " << p->info.count << " quyen" << endl;
+	}
 }
 
 //Len cua reader
 int readerCount(rList l)
 {
-	readRList(l);
 	int count = rLen(l);
 	return count;
 }
 
 void sexCount(rList r)
 {
-	readRList(r);
 	int countF = 0;
 	int countM = 0;
 	for (rNode* p = r.head; p != NULL; p = p->next)
@@ -104,8 +111,8 @@ void sexCount(rList r)
 			countM++;
 		}
 	}
-	cout << "Co " << countF << " doc gia nu";
-	cout << "Co " << countM << " doc gia nam";
+	cout << "Co " << countF << " doc gia nu" << endl;
+	cout << "Co " << countM << " doc gia nam" << endl;
 }
 
 //so sach dang duoc muon
