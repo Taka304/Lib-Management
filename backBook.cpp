@@ -144,16 +144,16 @@ bobNode* findBeforeBorrowByid(bobList l, char* id)
 }
 
 //tra sach ve thu vien
-void deleteBorrow(bobList& l, char *id, FILE *f)
+void deleteBorrow(bobList& l, char* id, FILE* f)
 {
 	bobNode* temp1 = findBorrowByRId(l, id);
-	bobNode * temp2 = findBeforeBorrowByid(l, id);
+	bobNode* temp2 = findBeforeBorrowByid(l, id);
 	temp2->next = temp1->next;
 	temp1->next = NULL;
 	delete temp1;
 	addBorrowList(l, f);
 }
- 
+
 //list sach mat
 void ISBNLostList_in(ISBNList& l, int n)
 {

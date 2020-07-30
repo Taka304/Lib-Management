@@ -119,7 +119,7 @@ void ISBNList_out(ISBNList l)
 }
 
 //tao phieu muon
-void createBoBook(bobInfo& b, FILE *f)
+void createBoBook(bobInfo& b, FILE* f)
 {
 	cout << "Nhap ma doc gia: ";
 	cin >> b.rID;
@@ -230,7 +230,7 @@ void BoBookOut(bobInfo b)
 }
 
 //ghi danh sach phieu muon vao file
-void addBorrowList(bobList l, FILE *f)
+void addBorrowList(bobList l, FILE* f)
 {
 	for (bobNode* p = l.head; p; p = p->next)
 	{

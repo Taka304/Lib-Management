@@ -143,7 +143,7 @@ void read1Book(FILE* f, bookInfo& r)
 	fgetc(f);
 	fscanf(f, "%[^,]", r.type);
 	fgetc(f);
-	fscanf(f, "%d%[^,]", r.cost);
+	fscanf(f, "%d", &r.cost);
 	fgetc(f);
 	fscanf(f, "%[^,]", r.num);
 	fgetc(f);
@@ -170,7 +170,7 @@ void readBList(bList& l)
 }
 
 //xuat thong tin 1 quyen sach ra man hinh
-void infoOut(bookInfo r)
+void infoBOut(bookInfo r)
 {
 	cout << "ISBN: " << r.ISBN << endl;
 	cout << "Ten sach: " << r.fullname << endl;
@@ -189,13 +189,13 @@ void readebListout(bList l)
 	for (bNode* k = l.head; k != NULL; k = k->next)
 	{
 		cout << "\n\n\t\t Sach thu " << dem++ << "\n";
-		infoOut(k->info);
+		infoBOut(k->info);
 	}
 	freebbook(l);
 }
 
 //nhap thong tin quyen sach
-void infoIn(bookInfo& r)
+void infoBIn(bookInfo& r)
 {
 	cout << "ISBN: ";
 	cin.getline(r.ISBN, sizeof(r.ISBN));
@@ -225,7 +225,7 @@ void write1book(FILE* f, bookInfo& r)
 }
 
 //Nhap thong tin 1 quyen sach vao cuoi file
-void insertbook(bookInfo& r)
+void insertBook(bookInfo& r)
 {
 	FILE* f = fopen("book.csv", "a");
 	if (!f)
@@ -233,13 +233,13 @@ void insertbook(bookInfo& r)
 		cout << "Khong mo duoc";
 		return;
 	}
-	infoIn(r);
+	infoBIn(r);
 	write1book(f, r);
 	fclose(f);
 }
 
 //ghi lai ds quyen sach vao file
-void writeRList(bList& l)
+void writeBList(bList& l)
 {
 	FILE* f = fopen("book.csv", "w+");
 	if (!f)
@@ -255,7 +255,7 @@ void writeRList(bList& l)
 }
 
 //xoa thong tin 1 quyen sach
-void deletebook(bList& l)
+void deleteBook(bList& l)
 {
 	readBList(l);
 	char newISBN[MAX_ISBN];
@@ -265,7 +265,7 @@ void deletebook(bList& l)
 	if (flag)
 	{
 		deletebAt(l, flag);
-		writeRList(l);
+		writeBList(l);
 	}
 	else
 	{
@@ -286,7 +286,7 @@ void FindISBN(bList& l)
 		if (strcmp(p->info.ISBN, i) == 0)
 		{
 			cout << "Thong tin sach co ISBN tren: " << endl;
-			infoOut(p->info);
+			infoBOut(p->info);
 			return;
 		}
 
@@ -392,12 +392,31 @@ void changeInfobyISBN(bList& l)
 		if (strcmp(p->info.ISBN, i) == 0)
 		{
 			cout << "Thong tin sach ban muon doi\n\n";
-			infoOut(p->info);
+			infoBOut(p->info);
 			changebInfo(p->info);
-			writeRList(l);
+			writeBList(l);
 			cout << "Doi thong tin thanh cong!";
 			return;
 		}
 	}
 	cout << "Khong tim duoc ISBN tren!";
+}
+
+
+void FindBookByName(bList& l)
+{
+	bNode* p;
+	char i[MAX_BNAME];
+	cout << "Nhap ten: ";
+	cin >> i;
+	for (p = l.head; p != NULL; p = p->next)
+	{
+		if (strcmp(p->info.fullname, i) == 0)
+		{
+			infoBOut(p->info);
+			return;
+		}
+
+	}
+	cout << "Khong tim duoc ten tren!";
 }

@@ -51,7 +51,7 @@ void ISBNList_in(bobList l1, ISBNList& l, int n);
 
 void ISBNList_out(ISBNList l);
 
-void createBoBook(bobInfo& b, FILE *f);
+void createBoBook(bobInfo& b, FILE* f);
 
 ISBNNode* findTailISBNList(ISBNList l);
 
