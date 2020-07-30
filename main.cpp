@@ -288,7 +288,7 @@ void menuDisplay(userInfo& a, int per)
 {
 	if (per == 3)
 	{
-		int optionA
+		int optionA;
 	}
 }
 
