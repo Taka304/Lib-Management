@@ -158,6 +158,18 @@ void insertPassword(char* pass) //Nhap mat khau duoi dang '*'
 	pass[i++] = '\0';
 	cout << endl;
 }
+
+//tim doc gia tu ten dang nhap
+userInfo findUserByUserName(uList l, char* uname)
+{
+	for (uNode* p = l.head; p; p = p->next)
+	{
+		if (strcmp(p->info.userName, uname) == 0)
+		{
+			return p->info;
+		}
+	}
+}
 userInfo Login()
 {
 	userInfo a;
@@ -176,6 +188,10 @@ userInfo Login()
 		insertPassword(a.passWord);
 	}
 	cout << "Chao mung ban." << endl;
+	uList l;
+	init_uList(l);
+	readUserFile(l);
+	a = findUserByUserName(l, a.userName);
 	return a; //Them menu co quyen su dung sau
 }
 // doi mat khau
@@ -355,6 +371,7 @@ userInfo createUser()
 	cin >> a.status;
 	return a;
 }
+
 //Them nguoi dung vao file
 void addUserToFile(userInfo a)
 {
@@ -374,24 +391,120 @@ bool checkPassWord(userInfo a, char* p)
 		return true;
 	return false;
 }
-void changeInfo(userInfo a)
+void changeInfo(userInfo &a)
 {
 	int cases = -1;
 	while (cases != 0)
 	{
 		cout << "Chon thong tin ban muon thay doi: " << endl;
-		cout << "1. Mat khau." << endl;
-		cout << "2. Ho va ten." << endl;
-		cout << "3. Ngay sinh." << endl;
-		cout << "4. CMND." << endl;
-		cout << "5. Dia chi." << endl;
-		cout << "6. Gioi tinh" << endl;
+		cout << "1. Ho va ten." << endl;
+		cout << "2. Ngay sinh." << endl;
+		cout << "3. CMND." << endl;
+		cout << "4. Dia chi." << endl;
+		cout << "5. Gioi tinh" << endl;
 		cout << "0. Thoat." << endl;
 		cout << "Nhap lua chon: ";
 		cin >> cases;
 		switch (cases)
 		{
 		case 1:
+		{
+			char nname[MAX_NAME];
+			cout << "Nhap ho va ten moi: ";
+			cin.ignore();
+			cin.getline(nname, sizeof(nname));
+			a = ChangeFullName(a, nname);
+			break;
+		}
+		case 2:
+		{
+			date nBirthDay;
+			cout << "Nhap ngay thang nam sinh moi: ";
+			cin >> nBirthDay.day;
+			cin >> nBirthDay.month;
+			cin >> nBirthDay.year;
+			ChangeBirthDay(a, nBirthDay);
+			break;
+		}
+		case 3:
+		{
+			char nidentity[MAX_CMND];
+			cout << "Nhap CMND moi: ";
+			cin >> nidentity;
+			a = ChangeIdentity(a, nidentity);
+			break;
+		}
+		case 4:
+		{
+			char naddress[MAX_ADDRESS];
+			cout << "Nhap dia chi moi: ";
+			cin.ignore();
+			cin.getline(naddress, MAX_ADDRESS);
+			a = ChangeAddress(a, naddress);
+			break;
+		}
+		case 5:
+		{
+			ChangeSex(a);
+		}
+		case 0:
+		{
+			return;
+		}
+		}
+	}
+}
+
+//in thong tin
+void UserInfoOut(userInfo a)
+{
+	cout << "Ho va ten: " << a.fullName << endl;
+	cout << "Ngay sinh: " << a.birthDay.day << "/" << a.birthDay.month << "/" << a.birthDay.year << endl;
+	cout << "CMND: " << a.identityID << endl;
+	cout << "Dia chi: " << a.address << endl;
+	cout << "Gioi tinh: ";
+	if (a.sex == 1)
+	{
+		cout << "Nu" << endl;
+	}
+	else if (a.sex == 2)
+	{
+		cout << "Nam" << endl;
+	}
+	cout << "Phan quyen: ";
+	if (a.permiss == 1)
+	{
+		cout << "Quan li" << endl;
+	}
+	else if (a.permiss == 2)
+	{
+		cout << "Chuyen vien" << endl;
+	}
+	else if (a.permiss == 3)
+	{
+		cout << "Admin" << endl;
+	}
+}
+void menuAdmin(userInfo &a)
+{
+	int cases = -1;
+	while (cases != 0)
+	{
+		cout << "Chon chuc nang de thuc hien." << endl;
+		cout << "1. Dang xuat." << endl;
+		cout << "2. Doi mat khau." << endl;
+		cout << "3. Cap nhat thong tin ca nhan." << endl;
+		cout << "4. Tao nguoi dung + phan quyen nguoi dung." << endl;
+		cout << "0. Thoat chuc nang." << endl;
+		cout << "Chon chuc nang: ";
+		cin >> cases;
+		switch (cases)
+		{
+		case 1:
+		{
+			return;
+		}
+		case 2:
 		{
 			char op[MAX_PASSWORD], np[MAX_PASSWORD];
 			cout << "Xac nhan mat khau cu:" << endl;
@@ -414,65 +527,127 @@ void changeInfo(userInfo a)
 			a = ChangePassword(a, np);
 			break;
 		}
-		case 2:
-		{
-			char nname[MAX_NAME];
-			cout << "Nhap ho va ten moi: ";
-			cin.getline(nname, MAX_NAME);
-			a = ChangeFullName(a, nname);
-			break;
-		}
 		case 3:
 		{
-			date nBirthDay;
-			cout << "Nhap ngay thang nam sinh moi: ";
-			cin >> nBirthDay.day;
-			cin >> nBirthDay.month;
-			cin >> nBirthDay.year;
-			ChangeBirthDay(a, nBirthDay);
+			changeInfo(a);
 			break;
 		}
 		case 4:
 		{
-			char nidentity[MAX_CMND];
-			cout << "Nhap CMND moi: ";
-			cin >> nidentity;
-			a = ChangeIdentity(a, nidentity);
+			userInfo b = createUser();
+			addUserToFile(b);
 			break;
 		}
-		case 5:
+		case 0:
 		{
-			char naddress[MAX_ADDRESS];
-			cout << "Nhap dia chi moi: ";
-			cin.getline(naddress, MAX_ADDRESS);
-			a = ChangeAddress(a, naddress);
-			break;
-		}
-		case 6:
-		{
-			ChangeSex(a);
+			return;
 		}
 		}
 	}
 }
-void menuAdmin()
+void menuManager(userInfo &a)
 {
-	//
+	int cases = -1;
+	while (cases != 0)
+	{
+		cout << "Chon chuc nang de thuc hien." << endl;
+		cout << "1. Dang xuat." << endl;
+		cout << "2. Doi mat khau." << endl;
+		cout << "3. Cap nhat thong tin ca nhan." << endl;
+		cout << "0. Thoat chuc nang." << endl;
+		cout << "Chon chuc nang: ";
+		cin >> cases;
+		switch (cases)
+		{
+		case 1:
+		{
+			return;
+		}
+		case 2:
+		{
+			char op[MAX_PASSWORD], np[MAX_PASSWORD];
+			cout << "Xac nhan mat khau cu:" << endl;
+			cout << "Nhap mat khau cu: ";
+			insertPassword(op);
+			if (checkPassWord(a, op))
+			{
+				cout << "Nhap mat khau moi: " << endl;
+				insertPassword(np);
+				ChangePassword(a, np);
+				break;
+			}
+			while (!checkPassWord(a, op))
+			{
+				cout << "Mat khau sai, moi nhap lai." << endl;
+				insertPassword(op);
+			}
+			cout << "Nhap mat khau moi: " << endl;
+			insertPassword(np);
+			a = ChangePassword(a, np);
+			break;
+		}
+		case 3:
+		{
+			changeInfo(a);
+			break;
+		}
+		case 0:
+		{
+			return;
+		}
+		}
+	}
 }
-void menuManager()
+void menuExpert(userInfo &a)
 {
-	//
-}
-void menuExpert()
-{
-	//
-}
-int main()
-{
-	userInfo a;
-	a = createUser();
-	addUserToFile(a);
-	userInfo b = Login();
-	changeInfo(b);
-	//Login();
+	int cases = -1;
+	while (cases != 0)
+	{
+		cout << "Chon chuc nang de thuc hien." << endl;
+		cout << "1. Dang xuat." << endl;
+		cout << "2. Doi mat khau." << endl;
+		cout << "3. Cap nhat thong tin ca nhan." << endl;
+		cout << "0. Thoat chuc nang." << endl;
+		cout << "Chon chuc nang: ";
+		cin >> cases;
+		switch (cases)
+		{
+		case 1:
+		{
+			return;
+		}
+		case 2:
+		{
+			char op[MAX_PASSWORD], np[MAX_PASSWORD];
+			cout << "Xac nhan mat khau cu:" << endl;
+			cout << "Nhap mat khau cu: ";
+			insertPassword(op);
+			if (checkPassWord(a, op))
+			{
+				cout << "Nhap mat khau moi: " << endl;
+				insertPassword(np);
+				ChangePassword(a, np);
+				break;
+			}
+			while (!checkPassWord(a, op))
+			{
+				cout << "Mat khau sai, moi nhap lai." << endl;
+				insertPassword(op);
+			}
+			cout << "Nhap mat khau moi: " << endl;
+			insertPassword(np);
+			a = ChangePassword(a, np);
+			break;
+		}
+		case 3:
+		{
+			changeInfo(a);
+			break;
+		}
+		case 0:
+		{
+			return;
+		}
+		}
+	}
 }
