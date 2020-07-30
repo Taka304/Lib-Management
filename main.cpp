@@ -3,6 +3,21 @@
 #include "borrowBook.h"
 #include "user.h"
 
+void menuUser(userInfo &a, int per)
+{
+	if (per == 3)
+	{
+		menuAdmin(a);
+	}
+	else if (per == 2)
+	{
+		menuExpert(a);
+	}
+	else
+	{
+		menuManager(a);
+	}
+}
 using namespace std;
 int main()
 {
@@ -15,13 +30,6 @@ int main()
 	readBorrowBook(c, f2);
 	BoBookOut(c);
 	fclose(f2);*/
-	/*userInfo a;
-	a = createUser();
-	addUserToFile(a);*/
 	userInfo b = Login();
-	char np[MAX_PASSWORD];
-	cout << "Nhap mat khau moi: ";
-	cin >> np;
-	ChangePassword(b, np);
-	//Login();
+	menuUser(b, b.permiss);
 }
