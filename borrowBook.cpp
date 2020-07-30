@@ -119,12 +119,14 @@ void ISBNList_out(ISBNList l)
 }
 
 //tao phieu muon
-void createBoBook(bobInfo& b)
+void createBoBook(bobInfo& b, FILE *f)
 {
 	cout << "Nhap ma doc gia: ";
 	cin >> b.rID;
 	cout << "Ngay thang nam muon sach: ";
-	b.borrowDate = today();
+	cin >> b.borrowDate.day;
+	cin >> b.borrowDate.month;
+	cin >> b.borrowDate.year;
 	cout << "Ngay tra du kien: ";
 	cin >> b.exBackDate.day;
 	cin >> b.exBackDate.month;
@@ -132,7 +134,10 @@ void createBoBook(bobInfo& b)
 	init_ISBNList(b.l);
 	cout << "Nhap so luong sach muon: ";
 	cin >> b.amount;
-	ISBNList_in(b.l, b.amount);
+	bobList borrowList;
+	init_borrowLinkedList(borrowList);
+	readBorrowBook(borrowList, f);
+	ISBNList_in(borrowList, b.l, b.amount);
 }
 
 //tim duoi ISBN list
@@ -148,8 +153,8 @@ ISBNNode* findTailISBNList(ISBNList l)
 	return NULL;
 }
 
-//doc phieu muon tu file
-void readBorrowBook(bobInfo& b, FILE* f)
+//doc 1 phieu muon tu file
+void read1BorrowBook(bobInfo& b, FILE* f)
 {
 	fscanf(f, "%[^,]", b.rID);
 	fgetc(f);
@@ -168,7 +173,24 @@ void readBorrowBook(bobInfo& b, FILE* f)
 		addISBN(b.l, id);
 	}
 }
-
+//xuat danh sach phieu muon
+void BorrowListOut(bobList l)
+{
+	for (bobNode* p = l.head; p; p = p->next)
+	{
+		BoBookOut(p->info);
+	}
+}
+//doc danh sach phieu muon
+void readBorrowBook(bobList& l, FILE* f)
+{
+	while (!feof(f))
+	{
+		bobInfo b;
+		read1BorrowBook(b, f);
+		addBorrow(l, b);
+	}
+}
 //ghi phieu muon vao file
 void addBorrowBook(bobInfo b, FILE* f)
 {
