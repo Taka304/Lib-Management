@@ -138,7 +138,7 @@ void createBoBook(bobInfo& b, FILE* f)
 	readBorrowBook(borrowList, f);
 	cout << "Nhap ma doc gia: ";
 	cin >> b.rID;
-	if (checkRID)
+	if (checkRID(borrowList, b.rID))
 	{
 		cout << "Doc gia nay da muon sach." << endl;
 		return;
