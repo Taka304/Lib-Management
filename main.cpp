@@ -18,18 +18,22 @@ void menuUser(userInfo &a, int per)
 		menuManager(a);
 	}
 }
+void menuBorrow()
+{
+	FILE* f = fopen("borrowbook.csv", "a+");
+	/*bobInfo b, c;
+	createBoBook(b, f);
+	addBorrowBook(b, f);*/
+	bobList l;
+	init_borrowLinkedList(l);
+	readBorrowBook(l, f);
+	BorrowListOut(l);
+	fclose(f);
+}
 using namespace std;
 int main()
 {
-	/*FILE* f = fopen("borrowbook.csv", "a+");
-	bobInfo b, c;
-	createBoBook(b);
-	addBorrowBook(b, f);
-	fclose(f);
-	FILE* f2 = fopen("borrowbook.csv", "r");
-	readBorrowBook(c, f2);
-	BoBookOut(c);
-	fclose(f2);*/
-	userInfo b = Login();
-	menuUser(b, b.permiss);
+	/*userInfo b = Login();
+	menuUser(b, b.permiss);*/
+	menuBorrow();
 }
