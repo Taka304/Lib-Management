@@ -51,12 +51,16 @@ void ISBNList_in(bobList l1, ISBNList& l, int n);
 
 void ISBNList_out(ISBNList l);
 
-void createBoBook(bobInfo& b);
+void createBoBook(bobInfo& b, FILE *f);
 
 ISBNNode* findTailISBNList(ISBNList l);
 
-void readBorrowBook(bobInfo& b, FILE* f);
+void read1BorrowBook(bobInfo& b, FILE* f);
+
+void readBorrowBook(bobList& l, FILE* f);
 
 void addBorrowBook(bobInfo b, FILE* f);
 
 void BoBookOut(bobInfo b);
+
+void BorrowListOut(bobList l);
