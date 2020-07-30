@@ -2,6 +2,8 @@
 #include <iostream>
 #include <ctime>
 #include "reader.h"
+#include "borrowBook.h" 
+#include "backBook.h"
 using namespace std;
 
 //Tao ds doc gia
@@ -465,12 +467,17 @@ void NameByIdOut(rList l)
 void bookOut(rList l, int i)
 {
 	int dem = 0;
+	FILE* f = fopen("borrowbook.csv", "r");
+	bobList l1;
+	init_borrowLinkedList(l1);
+	readBorrowBook(l1, f);
 	for (rNode* p = l.head; p; p = p->next)
 	{
 		dem++;
 		if (dem == i)
 		{
-
+			bobNode *temp = findBorrowByRId(l1, p->info.ID);
+			ISBNList_out(temp->info.l);
 		}
 	}
 }
