@@ -1,6 +1,6 @@
 #pragma once
-
-
+#include "book.h"
+#include "borrowBook.h"
 struct bookType
 {
 	char type[50];

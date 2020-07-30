@@ -1,6 +1,7 @@
 #pragma once
 #include "reader.h"
 #include "borrowBook.h"
+#include "book.h"
 
 struct babInfo
 {
@@ -27,7 +28,7 @@ bobNode* findBorrowByRId(bobList l, char* id);
 
 bobNode* findBeforeBorrowByid(bobList l, char* id);
 
-void deleteBorrow(bobList& l, char *id);
+void deleteBorrow(bobList& l, char* id, FILE* f);
 
 void ISBNLostList_in(ISBNList& l, int n);
 

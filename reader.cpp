@@ -264,7 +264,7 @@ void toStr(int n, readersInfo r)
 }
 
 //Nhap thong tin 1 doc gia vao cuoi file
-void insertReader(readersInfo& r, rList &l)
+void insertReader(readersInfo& r, rList& l)
 {
 	FILE* f = fopen("reader.txt", "a");
 	if (!f)
@@ -279,7 +279,7 @@ void insertReader(readersInfo& r, rList &l)
 		{
 			int tmp = int(k->info.ID) - 48;
 			tmp++;
-			toStr(tmp,r);
+			toStr(tmp, r);
 		}
 	}
 	write1Reader(f, r);
@@ -506,7 +506,7 @@ void menu2Option()
 		case 2:
 		{
 			readersInfo a;
-			insertReader(a,l);
+			insertReader(a, l);
 		}
 		case 3:
 		{
@@ -528,7 +528,7 @@ void menu2Option()
 	} while (option > 0 && option <= 6);
 }
 
-int main()
+/*int main()
 {
 	menu2Option();
-}
+}*/

@@ -144,13 +144,14 @@ bobNode* findBeforeBorrowByid(bobList l, char* id)
 }
 
 //tra sach ve thu vien
-void deleteBorrow(bobList& l, char *id)
+void deleteBorrow(bobList& l, char *id, FILE *f)
 {
 	bobNode* temp1 = findBorrowByRId(l, id);
 	bobNode * temp2 = findBeforeBorrowByid(l, id);
 	temp2->next = temp1->next;
 	temp1->next = NULL;
 	delete temp1;
+	addBorrowList(l, f);
 }
  
 //list sach mat
@@ -180,11 +181,12 @@ void createBaBook(babInfo& b, bobInfo bo)
 	ISBNLostList_in(b.lost, b.lostCount);
 	bList l;
 	readBList(l);
+	b.fee = 0;
 	for (int i = 1; i <= b.lostCount; i++)
 	{
 		b.fee += lostFee(l, b.lost);
 	}
-	b.lateDay = TinhChenhLechNgay(b.reBackDate.day, b.reBackDate.month, b.reBackDate.year, b.exBackDate.day, b.exBackDate.month, b.exBackDate.year);
+	b.lateDay = TinhChenhLechNgay(b.exBackDate.day, b.exBackDate.month, b.exBackDate.year, b.reBackDate.day, b.reBackDate.month, b.reBackDate.year);
 	b.money = b.lateDay * 5000 * b.amount + b.fee;
 }
 

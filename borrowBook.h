@@ -64,3 +64,5 @@ void addBorrowBook(bobInfo b, FILE* f);
 void BoBookOut(bobInfo b);
 
 void BorrowListOut(bobList l);
+
+void addBorrowList(bobList l, FILE* f);

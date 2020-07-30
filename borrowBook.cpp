@@ -167,10 +167,20 @@ void read1BorrowBook(bobInfo& b, FILE* f)
 	init_ISBNList(b.l);
 	for (int i = 0; i < b.amount; i++)
 	{
-		char id[MAX_BID];
-		fscanf(f, "%[^,]", id);
-		fgetc(f);
-		addISBN(b.l, id);
+		if (i == b.amount - 1)
+		{
+			char id[MAX_BID];
+			fscanf(f, "%[^\n]", id);
+			fgetc(f);
+			addISBN(b.l, id);
+		}
+		else
+		{
+			char id[MAX_BID];
+			fscanf(f, "%[^,]", id);
+			fgetc(f);
+			addISBN(b.l, id);
+		}
 	}
 }
 //xuat danh sach phieu muon
@@ -186,9 +196,15 @@ void readBorrowBook(bobList& l, FILE* f)
 {
 	while (!feof(f))
 	{
-		bobInfo b;
-		read1BorrowBook(b, f);
-		addBorrow(l, b);
+		if (fgetc(f) != -1)
+		{
+			fseek(f, -1, SEEK_CUR);
+			bobInfo b;
+			read1BorrowBook(b, f);
+			addBorrow(l, b);
+		}
+		else
+			break;
 	}
 }
 //ghi phieu muon vao file
@@ -211,4 +227,13 @@ void BoBookOut(bobInfo b)
 	cout << "So luong sach muon: " << b.amount << endl;
 	cout << "Danh sach sach muon: ";
 	ISBNList_out(b.l);
+}
+
+//ghi danh sach phieu muon vao file
+void addBorrowList(bobList l, FILE *f)
+{
+	for (bobNode* p = l.head; p; p = p->next)
+	{
+		addBorrowBook(p->info, f);
+	}
 }
