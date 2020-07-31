@@ -5,6 +5,7 @@
 #include <string.h>
 #include "user.h"
 #include "reader.h"
+#include "menu.h"
 using namespace std;
 
 // tao danh sach user
@@ -399,7 +400,7 @@ void changeInfo(userInfo& a)
 {
 	int cases = -1;
 	while (cases != 0)
-	{
+	{ 
 		cout << "Chon thong tin ban muon thay doi: " << endl;
 		cout << "1. Ho va ten." << endl;
 		cout << "2. Ngay sinh." << endl;
@@ -494,6 +495,7 @@ void menuUAdmin(userInfo& a)
 	int cases = -1;
 	while (cases != 0)
 	{
+		system("cls");
 		cout << "Chon chuc nang de thuc hien." << endl;
 		cout << "1. Dang xuat." << endl;
 		cout << "2. Doi mat khau." << endl;
@@ -506,7 +508,7 @@ void menuUAdmin(userInfo& a)
 		{
 		case 1:
 		{
-			return;
+			exit(0);
 		}
 		case 2:
 		{
@@ -554,6 +556,7 @@ void menuUManager(userInfo& a)
 	int cases = -1;
 	while (cases != 0)
 	{
+		system("cls");
 		cout << "Chon chuc nang de thuc hien." << endl;
 		cout << "1. Dang xuat." << endl;
 		cout << "2. Doi mat khau." << endl;
@@ -565,7 +568,7 @@ void menuUManager(userInfo& a)
 		{
 		case 1:
 		{
-			return;
+			exit(0);
 		}
 		case 2:
 		{
@@ -607,6 +610,7 @@ void menuUExpert(userInfo& a)
 	int cases = -1;
 	while (cases != 0)
 	{
+		system("cls");
 		cout << "Chon chuc nang de thuc hien." << endl;
 		cout << "1. Dang xuat." << endl;
 		cout << "2. Doi mat khau." << endl;
@@ -618,7 +622,7 @@ void menuUExpert(userInfo& a)
 		{
 		case 1:
 		{
-			return;
+			exit(0);
 		}
 		case 2:
 		{
