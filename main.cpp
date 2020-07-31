@@ -10,22 +10,6 @@
 
 using namespace std;
 
-void menuUser(userInfo& a, int per)
-{
-	if (per == 3)
-	{
-		menuUAdmin(a);
-	}
-	else if (per == 2)
-	{
-		menuUExpert(a);
-	}
-	else
-	{
-		menuUManager(a);
-	}
-}
-
 void menuBorrow()
 {
 	FILE* f = fopen("borrowbook.csv", "a+");
@@ -66,7 +50,7 @@ void menuReaderDisplay()
 	cout << "Nhan 4 de xoa thong tin doc gia" << endl;
 	cout << "Nhan 5 de tim kiem doc gia theo CMND" << endl;
 	cout << "Nhan 6 de tim kiem sach theo ho ten" << endl;
-	cout << "Nhan bat ky de tro lai menu" << endl;
+	cout << "Nhan 0 de tro lai menu" << endl;
 	cout << "Lua chon cua ban: ";
 }
 
@@ -96,12 +80,14 @@ void menuReader()
 			insertReader(a, l);
 			cout << "Nhap thanh cong!" << endl;
 			cout << "Nhan bat ky de quay tro lai";
+			system("pause");
 			break;
 		}
 		case 3:
 		{
 			changeInfobyID(l);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 4:
@@ -109,6 +95,7 @@ void menuReader()
 			readRList(l);
 			deleteReader(l);
 			cout << "Nhan bat ky de quay tro lai";
+			system("pause");
 			break;
 		}
 		case 5:
@@ -116,6 +103,7 @@ void menuReader()
 			readRList(l);
 			FindCMND(l);
 			cout << "Nhan bat ky de quay tro lai";
+			system("pause");
 			break;
 		}
 		case 6:
@@ -139,10 +127,17 @@ void menuReader()
 				bookOut(l2, id);
 			}
 			cout << "Nhan bat ky de quay tro lai";
+			system("pause");
+			break;
+		}
+		case 0:
+		{
+			return;
 			break;
 		}
 		}
-	} while (option > 0 && option <= 6);
+	} while (option >= 0 && option <= 6);
+	return;
 }
 
 void menuBookDisplay()
@@ -153,7 +148,7 @@ void menuBookDisplay()
 	cout << "Nhan 4 de xoa thong tin sach" << endl;
 	cout << "Nhan 5 de tim kiem sach theo ISBN" << endl;
 	cout << "Nhan 6 de tim kiem sach theo ten" << endl;
-	cout << "Nhan bat ky de tro lai menu" << endl;
+	cout << "Nhan 0 de tro lai menu" << endl;
 	cout << "Lua chon cua ban: ";
 }
 
@@ -172,7 +167,7 @@ void menuBook()
 		{
 			readBList(b);
 			readebListout(b);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
 			system("pause");
 			break;
 		}
@@ -182,76 +177,94 @@ void menuBook()
 			bookInfo a;
 			insertBook(a);
 			cout << "Nhap thanh cong!" << endl;
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 3:
 		{
 			changeInfobyISBN(b);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 4:
 		{
 			readBList(b);
 			deleteBook(b);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 5:
 		{
 			readBList(b);
 			FindISBN(b);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 6:
 		{
 			readBList(b);
 			FindBookByName(b);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
+			break;
+		}
+		case 0:
+		{
+			return;
 			break;
 		}
 		}
-	} while (option > 0 && option <= 6);
+	} while (option >= 0 && option <= 6);
+	return;
 }
 
-void menuBookDisplayForManager()
+void menuBookDisplayForExpert()
 {
 	cout << "Nhan 1 de tim kiem sach theo ISBN" << endl;
 	cout << "Nhan 2 de tim kiem sach theo ten" << endl;
-	cout << "Nhan bat ky de tro lai menu" << endl;
+	cout << "Nhan 0 de tro lai menu" << endl;
 	cout << "Lua chon cua ban: ";
 }
 
-void menuBookForManager()
+void menuBookForExpert()
 {
 	int option;
 	do
 	{
 		bList b;
 		system("cls");
-		menuBookDisplay();
+		menuBookDisplayForExpert();
 		cin >> option;
 		switch (option)
 		{
-		
+
 		case 1:
 		{
 			readBList(b);
 			FindISBN(b);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 2:
 		{
 			readBList(b);
 			FindBookByName(b);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
+		case 0:
+		{
+			return;
 		}
-	} while (option > 0 && option <= 2);
+		}
+	} while (option >= 0 && option <= 2);
+	return;
 }
 
 void menuSatisticDisplay()
@@ -262,7 +275,7 @@ void menuSatisticDisplay()
 	cout << "Nhan 4 de thong ke so luong doc gia theo gioi tinh" << endl;
 	cout << "Nhan 5 de thong ke so sach dang duoc muon" << endl;
 	cout << "Nhan 6 de thong ke danh sach doc gia bi tre han" << endl;
-	cout << "Nhan bat ky de tro lai menu" << endl;
+	cout << "Nhan 0 tro lai menu" << endl;
 	cout << "Lua chon cua ban: ";
 }
 
@@ -284,7 +297,7 @@ void menuSatistic()
 			readBList(bl);
 			dem = bookCount(bl);
 			cout << "Co " << dem << " quyen sach trong thu vien" << endl;
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai"<<endl;
 			system("pause");
 			break;
 		}
@@ -294,9 +307,10 @@ void menuSatistic()
 			init_BTList(bt);
 			readBList(bl);
 			bookTypeCount(bl, bt);
-			cout << "Thong ke sach theo the loai: "<<endl;
+			cout << "Thong ke sach theo the loai: " << endl;
 			bookTypeList(bt);
 			cout << "Nhan bat ky de quay tro lai";
+			system("pause");
 			break;
 		}
 		case 3:
@@ -304,12 +318,16 @@ void menuSatistic()
 			readRList(rl);
 			dem = readerCount(rl);
 			cout << "Co " << dem << " doc gia trong thu vien" << endl;
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 4:
 		{
 			readRList(rl);
 			sexCount(rl);
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 5:
@@ -317,18 +335,33 @@ void menuSatistic()
 			bobList l;
 			int count = countBorrowBook(l);
 			cout << "So sach dang duoc muon la: " << count << endl;
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 6:
 		{
 			bobList l;
+			FILE* f = fopen("borrowbook.csv", "r");
+			if (!f)
+			{
+				cout << "Khong mo duoc.";
+				return;
+			}
+			init_borrowLinkedList(l);
+			readBorrowBook(l, f);
+			fclose(f);
 			lateReader(l);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
+		case 0:
+		{
+			return;
 		}
-	} while (option > 0 && option <= 6);
+		}
+	} while (option >= 0 && option <= 6);
 }
 
 void menuSatisticDisplayFormanager()
@@ -339,29 +372,41 @@ void menuSatisticDisplayFormanager()
 	cout << "Lua chon cua ban: ";
 }
 
-void menuSatisticForManager()
+void menuSatisticForExpert()
 {
 	int option;
 	do
 	{
-		int dem;
-		bList bl;
-		rList rl;
 		system("cls");
-		menuSatisticDisplay();
+		menuSatisticDisplayFormanager();
 		cin >> option;
 		switch (option)
 		{
-		case 5:
+		case 1:
 		{
 
-			cout << "Nhan bat ky de quay tro lai";
+			bobList l;
+			int count = countBorrowBook(l);
+			cout << "So sach dang duoc muon la: " << count << endl;
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
-		case 6:
+		case 2:
 		{
-
-			cout << "Nhan bat ky de quay tro lai";
+			bobList l;
+			FILE* f = fopen("borrowbook.csv", "r");
+			if (!f)
+			{
+				cout << "Khong mo duoc.";
+				return;
+			}
+			init_borrowLinkedList(l);
+			readBorrowBook(l, f);
+			fclose(f);
+			lateReader(l);
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		}
@@ -380,7 +425,7 @@ void menuFuncDisplay()
 	cout << "Lua chon cua ban: ";
 }
 
-void menuReaderDisplayForManager()
+void menuReaderDisplayForExpert()
 {
 	cout << "Nhan 1 de xem danh sach doc gia trong thu vien" << endl;
 	cout << "Nhan 2 de them doc gia" << endl;
@@ -391,14 +436,14 @@ void menuReaderDisplayForManager()
 	cout << "Lua chon cua ban: ";
 }
 
-void menuReaderForManager()
+void menuReaderForExpert()
 {
 	int option;
 	do
 	{
 		rList l;
 		system("cls");
-		menuReaderDisplay();
+		menuReaderDisplayForExpert();
 		cin >> option;
 		switch (option)
 		{
@@ -416,25 +461,48 @@ void menuReaderForManager()
 			readersInfo a;
 			insertReader(a, l);
 			cout << "Nhap thanh cong!" << endl;
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 3:
 		{
 			changeInfobyID(l);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 4:
 		{
 			readRList(l);
 			FindCMND(l);
-			cout << "Nhan bat ky de quay tro lai";
+			cout << "Nhan bat ky de quay tro lai" << endl;
+			system("pause");
 			break;
 		}
 		case 5:
 		{
-
+			rList l1, l2;
+			init_rList(l1);
+			init_rList(l2);
+			readRList(l1);
+			FindBookByName(l1, l2);
+			int leng = rLen(l2);
+			if (leng == 1)
+			{
+				bookOut(l2, l2.head->info.ID);
+			}
+			else
+			{
+				NameByIdOut(l2);
+				char id[MAX_RID];
+				cout << "Nhap ma doc gia ban chon: ";
+				cin >> id;
+				bookOut(l2, id);
+			}
+			cout << "Nhan bat ky de quay tro lai";
+			system("pause");
+			break;
 		}
 		}
 	} while (option > 0 && option <= 5);
@@ -452,56 +520,9 @@ void menuDisplay(userInfo& a, int per)
 			cin >> optionA;
 			switch (optionA)
 			{
-				case 1:
-				{
-					menuUAdmin(a);
-					break;
-				}
-				case 2:
-				{
-					menuReader();
-					break;
-				}
-				case 3:
-				{
-					menuBook();
-					break;
-				}
-				case 4:
-				{
-					menuBorrow();
-					break;
-				}
-				case 5:
-				{
-					menuBack();
-					break;
-				}
-				case 6:
-				{
-					menuSatistic();
-					break;
-				}
-				case 0:
-				{
-					return;
-				}
-			}
-		} while (optionA >= 0 && optionA <= 6);
-	}
-	else if (per == 2)
-	{
-		int optionE;
-		do
-		{
-			system("cls");
-			menuFuncDisplay();
-			cin >> optionE;
-			switch (optionE)
-			{
 			case 1:
 			{
-				menuUExpert(a);
+				menuUAdmin(a);
 				break;
 			}
 			case 2:
@@ -534,6 +555,53 @@ void menuDisplay(userInfo& a, int per)
 				return;
 			}
 			}
+		} while (optionA >= 0 && optionA <= 6);
+	}
+	else if (per == 2)
+	{
+		int optionE;
+		do
+		{
+			system("cls");
+			menuFuncDisplay();
+			cin >> optionE;
+			switch (optionE)
+			{
+			case 1:
+			{
+				menuUExpert(a);
+				break;
+			}
+			case 2:
+			{
+				menuReaderForExpert();
+				break;
+			}
+			case 3:
+			{
+				menuBookForExpert();
+				break;
+			}
+			case 4:
+			{
+				menuBorrow();
+				break;
+			}
+			case 5:
+			{
+				menuBack();
+				break;
+			}
+			case 6:
+			{
+				menuSatisticForExpert();
+				break;
+			}
+			case 0:
+			{
+				return;
+			}
+			}
 		} while (optionE >= 0 && optionE <= 6);
 	}
 	else
@@ -553,12 +621,12 @@ void menuDisplay(userInfo& a, int per)
 			}
 			case 2:
 			{
-				menuReaderForManager();
+				menuReader();
 				break;
 			}
 			case 3:
 			{
-				menuBookForManager();
+				menuBook();
 				break;
 			}
 			case 4:
@@ -573,7 +641,7 @@ void menuDisplay(userInfo& a, int per)
 			}
 			case 6:
 			{
-				menuSatisticForManager();
+				menuSatistic();
 				break;
 			}
 			case 0:
@@ -586,8 +654,7 @@ void menuDisplay(userInfo& a, int per)
 }
 
 int main()
-{
+{ 
 	userInfo b = Login();
-	menuUser(b, b.permiss);
 	menuDisplay(b, b.permiss);
 }

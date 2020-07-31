@@ -47,6 +47,7 @@ date today();
 date expDay();
 void insertrTail(rList& l, readersInfo a);
 void readDate(FILE* filename, date& a);
+void readExDate(FILE* filename, date& a);
 void read1Reader(FILE* f, readersInfo& r);
 void readRList(rList& l);
 void infoOut(readersInfo r);
@@ -54,9 +55,8 @@ void readerListout(rList l);
 void infoIn(readersInfo& r);
 void writeDate(FILE* f, date a);
 void write1Reader(FILE* f, readersInfo& r);
-void toStr(int n, readersInfo r);
 void insertReader(readersInfo& r, rList& l);
-void insertReader(readersInfo& r, rList& l);
+void writeRList(rList& l);
 void deleteReader(rList& l);
 void FindCMND(rList& l);
 void changeInfodisplay();
@@ -64,8 +64,5 @@ void changeInfo(readersInfo& r);
 void changeInfobyID(rList& l);
 void FindBookByName(rList l, rList& l2);
 void NameByIdOut(rList l);
-void bookOut(rList l, char *id);
+void bookOut(rList l, char* id);
 
-void menu2Display();
-
-void menu2Option();

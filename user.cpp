@@ -50,12 +50,11 @@ void read1userInfo(FILE* f, userInfo& u, int& dem)
 {
 	userInfo* temp = &u;
 	dem = fread(temp, sizeof(userInfo), 1, f);
-	fclose(f);
 }
 //doc danh sach user tu file
 void readUserFile(uList& l)
 {
-	FILE* fp = fopen("account.txt", "rb");
+	FILE* fp = fopen("account.bin", "rb");
 	if (fp == NULL)
 	{
 		return;
@@ -72,7 +71,7 @@ void readUserFile(uList& l)
 //Ghi danh sach vao file
 void writeList(uList l)
 {
-	FILE* fp = fopen("account.txt", "wb");
+	FILE* fp = fopen("account.bin", "wb");
 	if (!fp)
 	{
 		return;
@@ -222,6 +221,7 @@ userInfo ChangePassword(userInfo a, char* np)
 	writeList(l);
 	return b;
 }
+
 userInfo ChangeFullName(userInfo a, char* nname)
 {
 	uList l;
@@ -249,6 +249,7 @@ userInfo ChangeFullName(userInfo a, char* nname)
 	writeList(l);
 	return b;
 }
+
 void ChangeBirthDay(userInfo& a, date nb)
 {
 	uList l;
@@ -264,6 +265,7 @@ void ChangeBirthDay(userInfo& a, date nb)
 	}
 	writeList(l);
 }
+
 userInfo ChangeIdentity(userInfo a, char* ni)
 {
 	uList l;
@@ -291,6 +293,7 @@ userInfo ChangeIdentity(userInfo a, char* ni)
 	writeList(l);
 	return b;
 }
+
 userInfo ChangeAddress(userInfo a, char* na)
 {
 	uList l;
@@ -318,6 +321,7 @@ userInfo ChangeAddress(userInfo a, char* na)
 	writeList(l);
 	return b;
 }
+
 void ChangeSex(userInfo& a)
 {
 	uList l;
@@ -375,7 +379,7 @@ userInfo createUser()
 //Them nguoi dung vao file
 void addUserToFile(userInfo a)
 {
-	FILE* f = fopen("account.txt", "ab+");
+	FILE* f = fopen("account.bin", "ab+");
 	if (!f)
 	{
 		cout << "Khong mo duoc.";
@@ -391,7 +395,7 @@ bool checkPassWord(userInfo a, char* p)
 		return true;
 	return false;
 }
-void changeInfo(userInfo &a)
+void changeInfo(userInfo& a)
 {
 	int cases = -1;
 	while (cases != 0)
@@ -485,7 +489,7 @@ void UserInfoOut(userInfo a)
 		cout << "Admin" << endl;
 	}
 }
-void menuUAdmin(userInfo &a)
+void menuUAdmin(userInfo& a)
 {
 	int cases = -1;
 	while (cases != 0)
@@ -545,7 +549,7 @@ void menuUAdmin(userInfo &a)
 		}
 	}
 }
-void menuUManager(userInfo &a)
+void menuUManager(userInfo& a)
 {
 	int cases = -1;
 	while (cases != 0)
@@ -598,7 +602,7 @@ void menuUManager(userInfo &a)
 		}
 	}
 }
-void menuUExpert(userInfo &a)
+void menuUExpert(userInfo& a)
 {
 	int cases = -1;
 	while (cases != 0)

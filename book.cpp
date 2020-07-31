@@ -145,8 +145,7 @@ void read1Book(FILE* f, bookInfo& r)
 	fgetc(f);
 	fscanf(f, "%d", &r.cost);
 	fgetc(f);
-	fscanf(f, "%[^,]", r.num);
-	fgetc(f);
+	fscanf(f, "%s\n", r.num);
 }
 
 //doc ds quyen sach tu file
@@ -197,6 +196,7 @@ void readebListout(bList l)
 //nhap thong tin quyen sach
 void infoBIn(bookInfo& r)
 {
+	cin.ignore();
 	cout << "ISBN: ";
 	cin.getline(r.ISBN, sizeof(r.ISBN));
 	cout << "Ten sach: ";
@@ -219,8 +219,8 @@ void infoBIn(bookInfo& r)
 //ghi thong tin 1 quyen sach vao file
 void write1book(FILE* f, bookInfo& r)
 {
-	fprintf(f, "%s,%s,%s,", r.ISBN, r.fullname, r.fullname);
-	fprintf(f, "%s,%s,%s,%d,%s,", r.nxb, r.pYear, r.type, r.cost, r.num);
+	fprintf(f, "%s,%s,%s,", r.ISBN, r.fullname, r.author);
+	fprintf(f, "%s,%s,%s,%d,%s", r.nxb, r.pYear, r.type, r.cost, r.num);
 	fprintf(f, "\n");
 }
 
@@ -259,7 +259,7 @@ void deleteBook(bList& l)
 {
 	readBList(l);
 	char newISBN[MAX_ISBN];
-	cout << "Nhap Id can xoa: ";
+	cout << "Nhap ISBN can xoa: ";
 	cin >> newISBN;
 	int flag = FindbX(newISBN, l);
 	if (flag)
@@ -269,11 +269,11 @@ void deleteBook(bList& l)
 	}
 	else
 	{
-		cout << "Khong ton tai nguoi doc co ISBN tren!";
+		cout << "Khong ton tai ISBN tren!";
 	}
 }
 
-//tim quyen sach theo cmnd
+//tim quyen sach theo ISBN
 void FindISBN(bList& l)
 {
 	bNode* p;
@@ -304,7 +304,7 @@ void changebInfodisplay()
 	cout << "Nhan 5 de thay doi the loai" << endl;
 	cout << "Nhan 6 de thay doi gia sach" << endl;
 	cout << "Nhan 7 bat ky de thay doi so quyen sach" << endl;
-	cout << "Nhan bat ki de quay tro lai menu";
+	cout << "Nhan 0 de quay tro lai menu" << endl;
 	cout << "Lua chon cua ban: ";
 }
 
@@ -323,7 +323,8 @@ void changebInfo(bookInfo& r)
 		{
 			char i[MAX_BNAME];
 			cout << "Nhap ten sach moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i,sizeof(i));
 			strcpy(r.fullname, i);
 			break;
 		}
@@ -331,7 +332,8 @@ void changebInfo(bookInfo& r)
 		{
 			char i[MAX_BAUTHOR];
 			cout << "Nhap ten tac gia moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i, sizeof(i));
 			strcpy(r.author, i);
 			break;
 		}
@@ -339,7 +341,8 @@ void changebInfo(bookInfo& r)
 		{
 			char i[MAX_BNXB];
 			cout << "Nhap NXB moi: ";
-			cin >> i;
+			cin.getline(i, sizeof(i));
+			cin.ignore();
 			strcpy(r.nxb, i);
 			break;
 		}
@@ -347,7 +350,8 @@ void changebInfo(bookInfo& r)
 		{
 			char i[MAX_BYEAR];
 			cout << "Nhap nam xuat ban moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i, sizeof(i));
 			strcpy(r.pYear, i);
 			break;
 		}
@@ -355,7 +359,8 @@ void changebInfo(bookInfo& r)
 		{
 			char i[MAX_BTYPE];
 			cout << "Nhap the loai moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i, sizeof(i));
 			strcpy(r.type, i);
 			break;
 		}
@@ -371,12 +376,18 @@ void changebInfo(bookInfo& r)
 		{
 			char i[MAX_BNUM];
 			cout << "Nhap so luong moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i, sizeof(i));
 			strcpy(r.num, i);
 			break;
 		}
+		case 0:
+		{
+			return;
 		}
-	} while (option > 0 && option <= 7);
+		}
+		return;
+	} while (option >= 0 && option <= 7);
 }
 
 //doi thong tin dua vao ISBN
@@ -395,7 +406,9 @@ void changeInfobyISBN(bList& l)
 			infoBOut(p->info);
 			changebInfo(p->info);
 			writeBList(l);
-			cout << "Doi thong tin thanh cong!";
+			cout << "Doi thong tin thanh cong!" << endl;
+			cout << "Nhan bat ky de quay lai" << endl;
+			system("pause");
 			return;
 		}
 	}
@@ -406,6 +419,7 @@ void changeInfobyISBN(bList& l)
 void FindBookByName(bList& l)
 {
 	bNode* p;
+	int flag = 0;
 	char i[MAX_BNAME];
 	cout << "Nhap ten: ";
 	cin >> i;
@@ -413,10 +427,15 @@ void FindBookByName(bList& l)
 	{
 		if (strcmp(p->info.fullname, i) == 0)
 		{
+			cout << "\n\n\t\t Sach thu " << flag++ << "\n";
 			infoBOut(p->info);
-			return;
 		}
-
 	}
-	cout << "Khong tim duoc ten tren!";
+	if (flag == 0)
+	{
+		cout << "Khong tim duoc ten tren!";
+		return;
+	}
+	else
+		return;
 }

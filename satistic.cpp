@@ -26,7 +26,7 @@ btNode* createbookt(bookType a)
 int bookCount(bList l)
 {
 	int count = bLen(l);
-	return count;
+	return count-1;
 }
 
 void insertbtTail(btList& l, bookType a)
@@ -50,13 +50,15 @@ int btLen(btList L)
 {
 	btNode* PH = L.head;
 	int i = 0;
-	if (PH != NULL) i = 1;
+	if (PH != NULL) i = 0;
 	while (PH != NULL)
 	{
-		if (PH == NULL) break;
+		if (PH == NULL) 
+			break;
 		PH = PH->next;
 		i++;
 	}
+	i--;
 	return i;
 }
 
@@ -64,19 +66,29 @@ void bookTypeCount(bList l, btList& b)
 {
 	for (bNode* p = l.head; p != NULL; p = p->next)
 	{
-		for (btNode* bt = b.head; bt != NULL; bt = bt->next)
+		if (b.head == NULL)
 		{
-			if (strcmp(p->info.type, bt->info.type) == 0)
+			bookType a;
+			a.count = 1;
+			strcpy(a.type, p->info.type);
+			insertbtTail(b, a);
+		}
+		else
+		{
+			for (btNode* bt = b.head; bt != NULL; bt = bt->next)
 			{
-				bt->info.count++;
-				break;
-			}
-			else if (bt->next == NULL)
-			{
-				bookType a;
-				a.count = 1;
-				strcpy(a.type, p->info.type);
-				insertbtTail(b, a);
+				if (strcmp(p->info.type, bt->info.type) == 0)
+				{
+					bt->info.count++;
+					break;
+				}
+				else if (bt->next == NULL && strcmp(p->info.type, bt->info.type) != 0)
+				{
+					bookType a;
+					a.count = 0;
+					strcpy(a.type, p->info.type);
+					insertbtTail(b, a);
+				}
 			}
 		}
 	}
@@ -95,7 +107,7 @@ void bookTypeList(btList l)
 int readerCount(rList l)
 {
 	int count = rLen(l);
-	return count;
+	return count-1;
 }
 
 void sexCount(rList r)
@@ -116,7 +128,7 @@ void sexCount(rList r)
 }
 
 //so sach dang duoc muon
-int countBorrowBook(bobList &l)
+int countBorrowBook(bobList& l)
 {
 	FILE* f = fopen("borrowbook.csv", "r");
 	if (!f)
@@ -125,7 +137,7 @@ int countBorrowBook(bobList &l)
 		return 0;
 	}
 	init_borrowLinkedList(l);
-	readBorrowBook(l,f);
+	readBorrowBook(l, f);
 	fclose(f);
 	int dem = 0;
 	for (bobNode* p = l.head; p; p = p->next)
@@ -138,15 +150,7 @@ int countBorrowBook(bobList &l)
 //Danh sach doc gia tre hen
 void lateReader(bobList l)
 {
-	FILE* f = fopen("borrowbook.csv", "r");
-	if (!f)
-	{
-		cout << "Khong mo duoc.";
-		return;
-	}
-	init_borrowLinkedList(l);
-	readBorrowBook(l, f);
-	fclose(f);
+	
 	date td = today();
 	cout << "Danh sach doc gia tre han: " << endl;
 	for (bobNode* p = l.head; p; p = p->next)

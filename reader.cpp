@@ -150,6 +150,16 @@ void readDate(FILE* filename, date& a)
 	fscanf(filename, "%d", &a.year);
 }
 
+void readExDate(FILE* filename, date& a)
+{
+
+	fscanf(filename, "%d", &a.day);
+	fgetc(filename);
+	fscanf(filename, "%d", &a.month);
+	fgetc(filename);
+	fscanf(filename, "%d\n", &a.year);
+}
+
 //doc thong tin 1 doc gia tu file
 void read1Reader(FILE* f, readersInfo& r)
 {
@@ -161,7 +171,7 @@ void read1Reader(FILE* f, readersInfo& r)
 	fgetc(f);
 	readDate(f, r.bDay);
 	fgetc(f);
-	fscanf(f, "%[^,]", r.sex);
+	fscanf(f, "%d",&r.sex);
 	fgetc(f);
 	fscanf(f, "%[^,]", r.email);
 	fgetc(f);
@@ -169,22 +179,22 @@ void read1Reader(FILE* f, readersInfo& r)
 	fgetc(f);
 	readDate(f, r.createdDay);
 	fgetc(f);
-	readDate(f, r.exDay);
-	fgetc(f);
+	readExDate(f, r.exDay);
 }
 
 //doc ds doc gia tu file
 void readRList(rList& l)
 {
-	FILE* f = fopen("reader.txt", "r+");
+	FILE* f = fopen("reader.csv", "r+");
 	if (!f)
 	{
 		cout << "Khong mo duoc";
 		return;
 	}
 	init_rList(l);
-	while (!feof(f))
+	while (fgetc(f) != -1)
 	{
+		fseek(f, -1, SEEK_CUR);
 		readersInfo r;
 		read1Reader(f, r);
 		insertrTail(l, r);
@@ -200,6 +210,7 @@ void infoOut(readersInfo r)
 	cout << "CMND: " << r.cmnd << endl;
 	cout << "Ngay thang nam sinh: " << r.bDay.day << "/" << r.bDay.month << "/" << r.bDay.year << endl;
 	cout << "Gioi tinh: " << r.sex << endl;
+	cout << "Email: " << r.email << endl;
 	cout << "Dia chi: " << r.address << endl;
 	cout << "Ngay lap the: " << r.createdDay.day << "/" << r.createdDay.month << "/" << r.createdDay.year << endl;
 	cout << "Ngay het han: " << r.exDay.day << "/" << r.exDay.month << "/" << r.exDay.year << endl;
@@ -229,6 +240,9 @@ void infoIn(readersInfo& r)
 	cin >> r.bDay.year;
 	cout << "Gioi tinh(1: Nu, 2: Nam): ";
 	cin >> r.sex;
+	cout << "Email: ";
+	cin.ignore();
+	cin.getline(r.email, sizeof(r.email));
 	cout << "Dia chi: ";
 	cin.getline(r.address, sizeof(r.address));
 	r.createdDay = today();
@@ -241,50 +255,67 @@ void writeDate(FILE* f, date a)
 	fprintf(f, "%d/%d/%d,", a.day, a.month, a.year);
 }
 
+void writeExDate(FILE* f, date a)
+{
+	fprintf(f, "%d/%d/%d", a.day, a.month, a.year);
+}
+
 //ghi thong tin 1 doc gia vao file
 void write1Reader(FILE* f, readersInfo& r)
 {
-	fprintf(f, "\n%s,%s,%s,", r.ID, r.fullname, r.cmnd);
+	fprintf(f, "%s,%s,%s,", r.ID, r.fullname, r.cmnd);
 	writeDate(f, r.bDay);
-	fprintf(f, "%s,%s,%s,", r.sex, r.email, r.address);
+	fprintf(f, "%d,%s,%s,", r.sex, r.email, r.address);
 	writeDate(f, r.createdDay);
-	writeDate(f, r.exDay);
+	writeExDate(f, r.exDay);
+	fprintf(f, "\n");
 }
 
-void toStr(int n, readersInfo r)
+bool validCheck(readersInfo& r, rList& l)
 {
-	char str[10];
-	r.ID[0] = '\0';
-	int count = 9 - strlen(str);
-	while (count > 0)
+	for (rNode* p = l.head; p; p = p->next)
 	{
-		strcat(r.ID, "0");
-		count--;
+		if (strcmp(p->info.ID, r.ID) == 0)
+		{
+			return true;
+		}
 	}
-	strcat(r.ID, str);
-	r.ID[9] = '\0';
+	return false;
 }
 
 //Nhap thong tin 1 doc gia vao cuoi file
 void insertReader(readersInfo& r, rList& l)
 {
-	FILE* f = fopen("reader.txt", "a");
+	FILE* f = fopen("reader.csv", "a");
 	if (!f)
 	{
 		cout << "Khong mo duoc";
 		return;
 	}
-	infoIn(r);
-	for (rNode* k = l.head; k != NULL; k = k->next)
+	readRList(l);
+	do
 	{
-		if (k->next == NULL)
-		{
-			int tmp = int(k->info.ID) - 48;
-			tmp++;
-			toStr(tmp, r);
-		}
-	}
+		cout << "Ma doc gia: ";
+		cin.ignore();
+		cin.getline(r.ID, sizeof(r.ID));
+	} while (validCheck(r, l));
+	infoIn(r);
 	write1Reader(f, r);
+	fclose(f);
+}
+
+void writeRList(rList& l)
+{
+	FILE* f = fopen("reader.csv", "w+");
+	if (!f)
+	{
+		cout << "Khong mo duoc";
+		return;
+	}
+	for (rNode* p = l.head; p != NULL; p = p->next)
+	{
+		write1Reader(f, p->info);
+	}
 	fclose(f);
 }
 
@@ -297,7 +328,7 @@ void deleteReader(rList& l)
 	int flag = FindrX(newID, l);
 	if (flag)
 	{
-		FILE* f = fopen("reader.txt", "w+");
+		FILE* f = fopen("reader.csv", "w+");
 		if (!f)
 		{
 			cout << "Khong mo duoc";
@@ -345,7 +376,7 @@ void changeInfodisplay()
 	cout << "Nhan 4 de thay doi gioi tinh" << endl;
 	cout << "Nhan 5 de thay doi email" << endl;
 	cout << "Nhan 6 de thay doi dia chi" << endl;
-	cout << "Nhan bat ky de tro lai menu" << endl;
+	cout << "Nhan 0 de tro lai menu" << endl;
 	cout << "Lua chon cua ban: ";
 }
 
@@ -355,7 +386,7 @@ void changeInfo(readersInfo& r)
 	int option;
 	do
 	{
-		system("cls");
+		cout << endl;
 		changeInfodisplay();
 		cin >> option;
 		switch (option)
@@ -364,7 +395,8 @@ void changeInfo(readersInfo& r)
 		{
 			char i[MAX_RNAME];
 			cout << "Nhap ho ten moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i, sizeof(i));
 			strcpy(r.fullname, i);
 			break;
 		}
@@ -382,7 +414,8 @@ void changeInfo(readersInfo& r)
 		{
 			char i[MAX_RCMND];
 			cout << "Nhap CMND moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i, sizeof(i));
 			strcpy(r.cmnd, i);
 			break;
 		}
@@ -402,7 +435,8 @@ void changeInfo(readersInfo& r)
 		{
 			char i[MAX_REMAIL];
 			cout << "Nhap email moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i, sizeof(i));
 			strcpy(r.email, i);
 			break;
 		}
@@ -410,11 +444,17 @@ void changeInfo(readersInfo& r)
 		{
 			char i[MAX_RADDRESS];
 			cout << "Nhap dia chi moi: ";
-			cin >> i;
+			cin.ignore();
+			cin.getline(i, sizeof(i));
 			strcpy(r.address, i);
 			break;
 		}
+		case 0:
+		{
+			return;
 		}
+		}
+		return;
 	} while (option > 0 && option <= 6);
 }
 
@@ -425,11 +465,18 @@ void changeInfobyID(rList& l)
 	char i[MAX_RID];
 	cout << "Nhap ID: ";
 	cin >> i;
+	readRList(l);
 	for (p = l.head; p != NULL; p = p->next)
 	{
 		if (strcmp(p->info.ID, i) == 0)
 		{
+			cout << "Thong tin nguoi doc ban muon doi\n\n";
+			infoOut(p->info);
 			changeInfo(p->info);
+			writeRList(l);
+			cout << "Doi thong tin thanh cong!" << endl;
+			cout << "Nhan bat ky de quay lai" << endl;
+			system("pause");
 			return;
 		}
 	}
@@ -462,13 +509,13 @@ void NameByIdOut(rList l)
 }
 
 //in sach theo ho ten va id da chon
-void bookOut(rList l, char * id)
+void bookOut(rList l, char* id)
 {
 	FILE* f = fopen("borrowbook.csv", "r");
 	bobList l1;
 	init_borrowLinkedList(l1);
 	readBorrowBook(l1, f);
-	bobNode *temp = findBorrowByRId(l1, id);
+	bobNode* temp = findBorrowByRId(l1, id);
 	if (temp == NULL)
 	{
 		cout << "Doc gia khong muon sach.";
@@ -481,60 +528,3 @@ void bookOut(rList l, char * id)
 	}
 }
 
-void menu2Display()
-{
-	cout << "Nhan 1 de xem danh sach doc gia trong thu vien" << endl;
-	cout << "Nhan 2 de them doc gia" << endl;
-	cout << "Nhan 3 de ching sua thong tin doc gia" << endl;
-	cout << "Nhan 4 de xoa thong tin doc gia" << endl;
-	cout << "Nhan 5 de tim kiem doc gia theo CMND" << endl;
-	cout << "Nhan 6 de tim kiem sach theo ho ten" << endl;
-	cout << "Nhan bat ky de tro lai menu" << endl;
-	cout << "Lua chon cua ban: ";
-}
-
-void menu2Option()
-{
-	int option;
-	do
-	{
-		rList l;
-		readRList(l);
-		system("cls");
-		changeInfodisplay();
-		cin >> option;
-		switch (option)
-		{
-		case 1:
-		{
-			readerListout(l);
-		}
-		case 2:
-		{
-			readersInfo a;
-			insertReader(a, l);
-		}
-		case 3:
-		{
-			changeInfobyID(l);
-		}
-		case 4:
-		{
-			deleteReader(l);
-		}
-		case 5:
-		{
-			FindCMND(l);
-		}
-		case 6:
-		{
-
-		}
-		}
-	} while (option > 0 && option <= 6);
-}
-
-/*int main()
-{
-	menu2Option();
-}*/

@@ -50,7 +50,7 @@ void ChangeSex(userInfo& a);
 userInfo createUser();
 void addUserToFile(userInfo a);
 bool checkPassWord(userInfo a, char* p);
-void changeInfo(userInfo &a);
+void changeInfo(userInfo& a);
 void UserInfoOut(userInfo a);
 void menuUAdmin(userInfo& a);
 void menuUManager(userInfo& a);
